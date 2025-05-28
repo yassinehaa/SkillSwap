@@ -14,6 +14,10 @@ Activer une version Premium avec quelques avantages visibles.
 
 
 I-Diagramme de cas d'utilisation
+
+
 ![image](https://github.com/user-attachments/assets/c96e8db9-44a6-4dcf-a5da-adb6e6f0ef26)
+
+
 II-Diagramme de classes
 ![Capture d'écran 2025-05-28 112156](https://github.com/user-attachments/assets/9d0b641f-c0c3-4b99-aaf7-dacf189073e8)
