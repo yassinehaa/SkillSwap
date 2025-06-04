@@ -21,3 +21,18 @@ I-Diagramme de cas d'utilisation
 
 II-Diagramme de classes
 ![Capture d'écran 2025-05-28 112156](https://github.com/user-attachments/assets/9d0b641f-c0c3-4b99-aaf7-dacf189073e8)
+
+III- Diagrammes de séquences
+inscription
+
+![Capture d'écran 2025-06-04 152915](https://github.com/user-attachments/assets/a059e05e-b869-45e6-8c47-ae7250ba6063)
+
+recherche de competence
+
+![Capture d'écran 2025-06-04 152810](https://github.com/user-attachments/assets/af96ed71-2b0b-4886-9907-08f0bad575cb)
+
+echange de messages
+
+
+![Capture d'écran 2025-06-04 153624](https://github.com/user-attachments/assets/e44ab208-843f-40ad-a6bc-7a585256ccd3)
+
