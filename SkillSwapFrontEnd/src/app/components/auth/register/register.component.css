@@ -1,0 +1,19 @@
+.custom-btn {
+  background-color: #d3e3f1;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.custom-btn:hover {
+  background-color: #b0c4de;
+}
+
+.text-custom-blue {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.text-custom-blue:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,14 @@
+<div class="login-container">
+  <h2>Welcome back</h2>
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="Email" required>
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" [(ngModel)]="password" placeholder="Password" required>
+  </div>
+  <a href="#" class="forgot-password">Forgot password?</a>
+  <button type="button" class="login-button" (click)="onSubmit()">Log in</button>
+  <p class="signup-link">Don't have an account? <a href="#">Sign up</a></p>
+</div>
