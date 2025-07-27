@@ -1,1 +1,4 @@
-<p>message-send works!</p>
+<div class="border-top p-3 d-flex">
+  <input [(ngModel)]="messageText" type="text" class="form-control me-2" placeholder="Write a message..." (keyup.enter)="send()">
+  <button class="btn btn-primary" (click)="send()">Send</button>
+</div>
