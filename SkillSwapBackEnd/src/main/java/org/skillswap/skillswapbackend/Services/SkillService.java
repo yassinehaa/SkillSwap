@@ -36,13 +36,13 @@ public class SkillService {
         List<Skill> searchedSkills = skillRepository.findByUserId(userId)
                 .stream()
                 .filter(skill -> skill.getType() == Skill.SkillType.SEARCHED)
-                .collect(Collectors.toList());
+                .toList();
 
         return skillRepository.findByType(Skill.SkillType.OFFERED)
                 .stream()
                 .filter(offeredSkill -> searchedSkills.stream()
                         .anyMatch(searchedSkill -> searchedSkill.getName().equals(offeredSkill.getName())))
                 .map(skill -> modelMapper.map(skill, SkillDTO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

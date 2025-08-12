@@ -5,6 +5,7 @@ import org.skillswap.skillswapbackend.Models.User;
 import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.skillswap.skillswapbackend.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,10 @@ public class UserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public void init() {
         modelMapper.typeMap(UserDTO.class, User.class)
                 .addMappings(mapper -> mapper.skip(User::setId));
@@ -27,6 +32,7 @@ public class UserService {
             throw new RuntimeException("Email already exists");
         }
         User user = modelMapper.map(userDTO, User.class);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Encode password
         user.setPremium(false); // Default to non-Premium
         user = userRepository.save(user);
         return modelMapper.map(user, UserDTO.class);
