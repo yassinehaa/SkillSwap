@@ -10,6 +10,7 @@ import {Message} from 'postcss';
     DatePipe
   ],
   templateUrl: './message-conversation.component.html',
+  standalone: true,
   styleUrl: './message-conversation.component.css'
 })
 export class MessageConversationComponent {

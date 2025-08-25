@@ -1,0 +1,30 @@
+<div *ngIf="user">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-3">
+          <p><strong>ID:</strong></p>
+          <p><strong>First Name:</strong></p>
+          <p><strong>Last Name:</strong></p>
+          <p><strong>Email:</strong></p>
+          <p><strong>Premium Status:</strong></p>
+        </div>
+        <div class="col-md-9">
+          <p>{{ user.id }}</p>
+          <p>{{ user.firstName }}</p>
+          <p>{{ user.lastName }}</p>
+          <p>{{ user.email }}</p>
+          <p>{{ user.isPremium ? 'Premium' : 'Standard' }}</p>
+        </div>
+      </div>
+      <hr>
+      <h4>Proposed Skills</h4>
+      <ul>
+        <li *ngFor="let skill of user.proposedSkills">{{ skill.name }}</li>
+      </ul>
+      <hr>
+      <h4>Searched Skills</h4>
+      <ul>
+        <li *ngFor="let skill of user.searchedSkills">{{ skill.name }}</li>
+      </ul>
+    </div>
+  </div>

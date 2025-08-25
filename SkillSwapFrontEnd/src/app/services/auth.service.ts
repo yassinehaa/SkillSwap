@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -16,6 +16,20 @@ export class AuthService {
   }
 
   login(credentials: any): Observable<string> {
-    return this.http.post(`${this.apiUrl}/login`, credentials, { responseType: 'text' });
+    return this.http.post(`${this.apiUrl}/login`, credentials, { responseType: 'text' }).pipe(
+      tap(token => this.saveToken(token))
+    );
+  }
+
+  saveToken(token: string): void {
+    localStorage.setItem('token', token);
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('token');
   }
 }

@@ -14,6 +14,7 @@
     <a href="#" class="text-dark fw-medium text-decoration-none">Browse</a>
     <a href="#" class="text-dark fw-medium text-decoration-none">Teach</a>
     <a href="#" class="text-dark fw-medium text-decoration-none">Learn</a>
-    <button class="btn fw-bold px-4 py-2" style="background-color: #f1f2f4; border-radius: 12px;">Sign up</button>
+    <button *ngIf="!isAuthenticated" class="btn fw-bold px-4 py-2" style="background-color: #f1f2f4; border-radius: 12px;">Sign up</button>
+    <button *ngIf="isAuthenticated" (click)="logout()" class="btn fw-bold px-4 py-2" style="background-color: #f1f2f4; border-radius: 12px;">Logout</button>
   </div>
 </nav>

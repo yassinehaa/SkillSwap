@@ -1,3 +1,5 @@
+import { Skill } from './skill.model';
+
 export interface User {
   id?: number;
   firstName: string;
@@ -5,4 +7,6 @@ export interface User {
   email: string;
   password?: string;
   isPremium: boolean;
+  proposedSkills?: Skill[];
+  searchedSkills?: Skill[];
 }

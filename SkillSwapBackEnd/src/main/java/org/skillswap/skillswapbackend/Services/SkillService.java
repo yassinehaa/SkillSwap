@@ -8,6 +8,7 @@ import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.skillswap.skillswapbackend.dto.SkillDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +33,18 @@ public class SkillService {
         return modelMapper.map(skill, SkillDTO.class);
     }
 
+    @Transactional
+    public void deleteSkillsByUserId(Long userId) {
+        skillRepository.deleteByUserId(userId);
+    }
+
+    public List<SkillDTO> getSkillsByUserIdAndType(Long userId, Skill.SkillType type) {
+        return skillRepository.findByUserIdAndType(userId, type)
+                .stream()
+                .map(skill -> modelMapper.map(skill, SkillDTO.class))
+                .collect(Collectors.toList());
+    }
+
     public List<SkillDTO> getMatchingSkills(Long userId) {
         List<Skill> searchedSkills = skillRepository.findByUserId(userId)
                 .stream()
@@ -44,5 +57,21 @@ public class SkillService {
                         .anyMatch(searchedSkill -> searchedSkill.getName().equals(offeredSkill.getName())))
                 .map(skill -> modelMapper.map(skill, SkillDTO.class))
                 .toList();
+    }
+
+    public List<SkillDTO> addSkills(Long userId, List<SkillDTO> skillDTOs) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        List<Skill> skills = skillDTOs.stream()
+                .map(skillDTO -> {
+                    Skill skill = modelMapper.map(skillDTO, Skill.class);
+                    skill.setUser(user);
+                    return skill;
+                })
+                .collect(Collectors.toList());
+        skills = skillRepository.saveAll(skills);
+        return skills.stream()
+                .map(skill -> modelMapper.map(skill, SkillDTO.class))
+                .collect(Collectors.toList());
     }
 }

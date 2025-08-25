@@ -1,6 +1,7 @@
 package org.skillswap.skillswapbackend.Services;
 
 import org.modelmapper.ModelMapper;
+import org.skillswap.skillswapbackend.Models.Skill;
 import org.skillswap.skillswapbackend.Models.User;
 import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.skillswap.skillswapbackend.dto.UserDTO;
@@ -22,10 +23,8 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void init() {
-        modelMapper.typeMap(UserDTO.class, User.class)
-                .addMappings(mapper -> mapper.skip(User::setId));
-    }
+    @Autowired
+    private SkillService skillService;
 
     public UserDTO createUser(UserDTO userDTO) {
         if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
@@ -41,7 +40,19 @@ public class UserService {
     public UserDTO getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return modelMapper.map(user, UserDTO.class);
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        userDTO.setProposedSkills(skillService.getSkillsByUserIdAndType(id, Skill.SkillType.OFFERED));
+        userDTO.setSearchedSkills(skillService.getSkillsByUserIdAndType(id, Skill.SkillType.SEARCHED));
+        return userDTO;
+    }
+
+    public UserDTO getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        userDTO.setProposedSkills(skillService.getSkillsByUserIdAndType(user.getId(), Skill.SkillType.OFFERED));
+        userDTO.setSearchedSkills(skillService.getSkillsByUserIdAndType(user.getId(), Skill.SkillType.SEARCHED));
+        return userDTO;
     }
 
     public UserDTO updateUser(Long id, UserDTO userDTO) {
@@ -50,7 +61,21 @@ public class UserService {
         if (userDTO.getId() != null && !userDTO.getId().equals(id)) {
             throw new RuntimeException("User ID in request body does not match path ID");
         }
-        modelMapper.map(userDTO, user);
+        // Update basic user information
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setPremium(userDTO.isPremium());
+
+        // Update skills
+        skillService.deleteSkillsByUserId(id);
+        if (userDTO.getProposedSkills() != null && !userDTO.getProposedSkills().isEmpty()) {
+            skillService.addSkills(id, userDTO.getProposedSkills());
+        }
+        if (userDTO.getSearchedSkills() != null && !userDTO.getSearchedSkills().isEmpty()) {
+            skillService.addSkills(id, userDTO.getSearchedSkills());
+        }
+
         user = userRepository.save(user);
         return modelMapper.map(user, UserDTO.class);
     }
@@ -70,3 +95,4 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 }
+

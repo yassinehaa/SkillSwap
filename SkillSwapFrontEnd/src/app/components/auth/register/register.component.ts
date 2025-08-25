@@ -11,6 +11,7 @@ import {Router, RouterLink} from "@angular/router";
     RouterLink
   ],
   templateUrl: './register.component.html',
+  standalone: true,
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {

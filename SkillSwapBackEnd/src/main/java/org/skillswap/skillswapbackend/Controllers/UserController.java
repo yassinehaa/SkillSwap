@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -45,6 +46,11 @@ public class UserController {
         final String jwt = jwtUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(jwt);
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<UserDTO> getCurrentUser(Principal principal) {
+        return ResponseEntity.ok(userService.getUserByEmail(principal.getName()));
     }
 
     @GetMapping("/{id}")
