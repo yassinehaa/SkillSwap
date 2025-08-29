@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.skillswap.skillswapbackend.dto.SkillSearchResultDTO;
+import org.skillswap.skillswapbackend.dto.UserDTO;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,6 +75,17 @@ public class SkillService {
         skills = skillRepository.saveAll(skills);
         return skills.stream()
                 .map(skill -> modelMapper.map(skill, SkillDTO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
+    public List<SkillSearchResultDTO> getSkillsByName(String name) {
+        return skillRepository.findByName(name)
+                .stream()
+                .map(skill -> {
+                    SkillDTO skillDTO = modelMapper.map(skill, SkillDTO.class);
+                    UserDTO userDTO = modelMapper.map(skill.getUser(), UserDTO.class);
+                    return new SkillSearchResultDTO(skillDTO, userDTO);
+                })
+                .toList();
+    }
+
 }

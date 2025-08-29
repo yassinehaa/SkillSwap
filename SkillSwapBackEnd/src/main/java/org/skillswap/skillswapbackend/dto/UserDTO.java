@@ -2,8 +2,8 @@ package org.skillswap.skillswapbackend.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.List;
-import org.skillswap.skillswapbackend.dto.SkillDTO;
 
 @Getter
 @Setter

@@ -32,6 +32,12 @@ export class UserService {
     );
   }
 
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl, { headers: this.getHeaders() }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(error: any): Observable<never> {
     console.error('An error occurred', error);
     return throwError(() => new Error(error.message || 'Server error'));
