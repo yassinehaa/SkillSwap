@@ -12,7 +12,7 @@
     <ul>
       <li *ngFor="let result of results">
         <p><strong>Skill:</strong> {{ result.skill.name }}</p>
-        <p><strong>User:</strong> {{ result.user.firstName }} {{ result.user.lastName }}</p>
+        <p><strong>User:</strong> <a [routerLink]="['/profile', result.user.id]">{{ result.user.firstName }} {{ result.user.lastName }}</a></p>
       </li>
     </ul>
   </div>

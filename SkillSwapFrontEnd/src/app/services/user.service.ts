@@ -32,6 +32,12 @@ export class UserService {
     );
   }
 
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl, { headers: this.getHeaders() }).pipe(
       catchError(this.handleError)

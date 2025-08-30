@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';   // ✅ needed for ngModel
 import { SearchService } from '../../services/search.service';
 import { SkillSearchResultDTO } from '../../models/skill-search-result.dto';
 
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-search-results',
   standalone: true,
-  imports: [CommonModule, FormsModule],  // ✅ include FormsModule
+  imports: [CommonModule, FormsModule, RouterLink],  // ✅ include FormsModule
   templateUrl: './search-results.component.html',
   styleUrls: ['./search-results.component.css']
 })

@@ -5,6 +5,8 @@ import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user.model';
 import { Skill } from '../../../models/skill.model';
 
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-user-profile',
   standalone: true,
@@ -20,7 +22,7 @@ export class UserProfileComponent implements OnInit {
   newSearchedSkill = '';
   errorMessage: string | null = null;
 
-  constructor(private userService: UserService, private fb: FormBuilder) {
+  constructor(private userService: UserService, private fb: FormBuilder, private route: ActivatedRoute) {
     this.profileForm = this.fb.group({
       isPremium: [false],
       proposedSkills: this.fb.array([]),
@@ -29,7 +31,14 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadUserProfile();
+    this.route.paramMap.subscribe(params => {
+      const userId = params.get('id');
+      if (userId) {
+        this.loadUserProfile(Number(userId));
+      } else {
+        this.loadUserProfile();
+      }
+    });
   }
 
   // Get form arrays
@@ -42,8 +51,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   // Load user profile
-  loadUserProfile(): void {
-    this.userService.getUser().subscribe({
+  loadUserProfile(userId?: number): void {
+    const userObservable = userId ? this.userService.getUserById(userId) : this.userService.getUser();
+    userObservable.subscribe({
       next: (user) => {
         this.user = user;
         this.profileForm.patchValue({
