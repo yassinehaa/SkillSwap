@@ -1,9 +1,6 @@
-<div class="p-3 overflow-auto" style="height: calc(100vh - 180px); background-color: #f9f9f9;">
-  <div *ngFor="let msg of messages" class="mb-3 d-flex" [class.flex-row-reverse]="msg.senderId === currentUserId">
-    <img [src]="getAvatar(msg.senderId)" class="rounded-circle me-2" width="32" height="32" />
-    <div [ngClass]="{'bg-primary text-white': msg.senderId === currentUserId, 'bg-light': msg.senderId !== currentUserId}" class="p-2 rounded" style="max-width: 60%;">
-      <div>{{ msg.content }}</div>
-      <small class="d-block text-end">{{ msg.timestamp | date:'shortTime' }}</small>
-    </div>
+<div class="conversation-container">
+  <div *ngFor="let message of messages" class="message" [ngClass]="{'sent': message.senderId === userId, 'received': message.senderId !== userId}">
+    <p>{{ message.content }}</p>
+    <span>{{ message.timestamp | date:'short' }}</span>
   </div>
 </div>

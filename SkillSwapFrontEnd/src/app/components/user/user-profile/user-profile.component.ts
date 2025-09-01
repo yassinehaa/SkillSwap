@@ -1,28 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { UserService } from '../../../services/user.service';
-import { User } from '../../../models/user.model';
-import { Skill } from '../../../models/skill.model';
+import { MessageConversationComponent } from '../../message/message-conversation/message-conversation.component';
+import { MessageSendComponent } from '../../message/message-send/message-send.component';
+import { AuthService } from '../../../services/auth.service';
+import {CommonModule} from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {User} from '../../../models/user.model';
+import {UserService} from '../../../services/user.service';
+import {ActivatedRoute} from '@angular/router';
+import {Skill} from '../../../models/skill.model';
 
-import { ActivatedRoute } from '@angular/router';
+import { MessageService } from '../../../services/message.service';
 
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MessageConversationComponent, MessageSendComponent],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
   user: User | null = null;
+  currentUser: User | null = null;
   isEditing = false;
   profileForm: FormGroup;
   newProposedSkill = '';
   newSearchedSkill = '';
   errorMessage: string | null = null;
 
-  constructor(private userService: UserService, private fb: FormBuilder, private route: ActivatedRoute) {
+  constructor(private userService: UserService, private fb: FormBuilder, private route: ActivatedRoute, private messageService: MessageService) {
     this.profileForm = this.fb.group({
       isPremium: [false],
       proposedSkills: this.fb.array([]),
@@ -31,6 +36,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userService.getUser().subscribe(user => {
+      this.currentUser = user;
+      if (this.currentUser) {
+        this.messageService.connect(this.currentUser.id);
+      }
+    });
     this.route.paramMap.subscribe(params => {
       const userId = params.get('id');
       if (userId) {

@@ -80,6 +80,13 @@
       <ng-template #loading>
         <p>Loading profile...</p>
       </ng-template>
+
+      <div *ngIf="user && currentUser && user.id !== currentUser.id">
+        <hr>
+        <h3>Message {{ user.firstName }}</h3>
+        <app-message-conversation [userId]="currentUser.id" [otherUserId]="user.id"></app-message-conversation>
+        <app-message-send [senderId]="currentUser.id" [receiverId]="user.id"></app-message-send>
+      </div>
     </div>
   </ng-template>
 </div>

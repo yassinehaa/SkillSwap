@@ -1,4 +1,4 @@
-<div class="border-top p-3 d-flex">
-  <input [(ngModel)]="messageText" type="text" class="form-control me-2" placeholder="Write a message..." (keyup.enter)="send()">
-  <button class="btn btn-primary" (click)="send()">Send</button>
+<div class="send-container">
+  <input type="text" [(ngModel)]="content" placeholder="Type a message..." (keyup.enter)="sendMessage()">
+  <button (click)="sendMessage()">Send</button>
 </div>

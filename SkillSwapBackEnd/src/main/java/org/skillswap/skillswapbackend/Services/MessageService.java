@@ -9,12 +9,13 @@ import org.skillswap.skillswapbackend.dto.MessageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
+
     @Autowired
     private MessageRepository messageRepository;
 
@@ -24,25 +25,22 @@ public class MessageService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public MessageDTO sendMessage(Long senderId, Long receiverId, MessageDTO messageDTO) {
-        User sender = userRepository.findById(senderId)
-                .orElseThrow(() -> new RuntimeException("Sender not found"));
-        User receiver = userRepository.findById(receiverId)
-                .orElseThrow(() -> new RuntimeException("Receiver not found"));
-        Message message = modelMapper.map(messageDTO, Message.class);
+    public MessageDTO saveMessage(MessageDTO messageDTO) {
+        User sender = userRepository.findById(messageDTO.getSenderId()).orElseThrow(() -> new RuntimeException("Sender not found"));
+        User receiver = userRepository.findById(messageDTO.getReceiverId()).orElseThrow(() -> new RuntimeException("Receiver not found"));
+
+        Message message = new Message();
         message.setSender(sender);
         message.setReceiver(receiver);
-        message.setTimestamp(LocalDateTime.now());
-        message = messageRepository.save(message);
-        return modelMapper.map(message, MessageDTO.class);
+        message.setContent(messageDTO.getContent());
+        message.setTimestamp(new Date());
+
+        Message savedMessage = messageRepository.save(message);
+        return modelMapper.map(savedMessage, MessageDTO.class);
     }
 
-    public List<MessageDTO> getConversation(Long userId1, Long userId2) {
-        User user1 = userRepository.findById(userId1)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        User user2 = userRepository.findById(userId2)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return messageRepository.findBySenderAndReceiverOrReceiverAndSenderOrderByTimestamp(user1, user2, user1, user2)
+    public List<MessageDTO> getConversation(Long senderId, Long receiverId) {
+        return messageRepository.findConversation(senderId, receiverId)
                 .stream()
                 .map(message -> modelMapper.map(message, MessageDTO.class))
                 .collect(Collectors.toList());

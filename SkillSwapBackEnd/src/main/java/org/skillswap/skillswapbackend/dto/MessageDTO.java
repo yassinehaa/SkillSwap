@@ -3,7 +3,7 @@ package org.skillswap.skillswapbackend.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -12,5 +12,5 @@ public class MessageDTO {
     private Long senderId;
     private Long receiverId;
     private String content;
-    private LocalDateTime timestamp;
+    private Date timestamp;
 }

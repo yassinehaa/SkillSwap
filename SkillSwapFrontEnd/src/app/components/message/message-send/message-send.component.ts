@@ -1,23 +1,32 @@
-import {Component, Output} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import EventEmitter from 'node:events';
+import {Component, Input, numberAttribute} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MessageService } from '../../../services/message.service';
+import { Message } from '../../../models/message.model';
 
 @Component({
   selector: 'app-message-send',
-  imports: [
-    FormsModule
-  ],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './message-send.component.html',
-  styleUrl: './message-send.component.css'
+  styleUrls: ['./message-send.component.css']
 })
 export class MessageSendComponent {
-  @Output() messageSent = new EventEmitter<string>();
-  messageText: string = '';
+  @Input({transform: numberAttribute}) senderId!: number;
+  @Input({transform: numberAttribute}) receiverId!: number;
+  content: string = '';
 
-  send() {
-    if (this.messageText.trim()) {
-      this.messageSent.emit(this.messageText.trim());
-      this.messageText = '';
+  constructor(private messageService: MessageService) { }
+
+  sendMessage(): void {
+    if (this.content.trim()) {
+      const message: Message = {
+        senderId: this.senderId,
+        receiverId: this.receiverId,
+        content: this.content
+      };
+      this.messageService.sendMessage(message);
+      this.content = '';
     }
   }
 }

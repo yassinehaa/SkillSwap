@@ -17,7 +17,7 @@
       <label for="password">Password</label>
       <input type="password" id="password" placeholder="Enter your password" required>
     </div>
-    <button type="submit" class="register-button">Sign up</button>
+    <button (click)="onSubmit()" type="submit" class="register-button">Sign up</button>
   </form>
   <div class="login-link">
     Already have an account? <a routerLink="/login">Log in</a>
