@@ -1,1 +1,66 @@
-<p>header works!</p>
+<header class="sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" routerLink="/">
+        <i class="bi bi-people-fill me-2"></i>
+        <span>SkillSwap</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+              <i class="bi bi-house-door me-1"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/skills" routerLinkActive="active">
+              <i class="bi bi-tools me-1"></i> Skills
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/messages" routerLinkActive="active">
+              <i class="bi bi-chat-dots me-1"></i> Messages
+            </a>
+          </li>
+        </ul>
+        
+        <!-- Search Form -->
+        <form class="d-flex me-2">
+          <div class="input-group">
+            <input class="form-control" type="search" placeholder="Search skills..." aria-label="Search">
+            <button class="btn btn-light" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+        
+        <!-- User Menu (if logged in) -->
+        <div class="d-flex align-items-center" *ngIf="isLoggedIn; else loginButtons">
+          <div class="dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="https://via.placeholder.com/32" class="rounded-circle me-2" alt="Profile" width="32" height="32">
+              <span>{{ username }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" routerLink="/profile"><i class="bi bi-person me-2"></i>Profile</a></li>
+              <li><a class="dropdown-item" routerLink="/settings"><i class="bi bi-gear me-2"></i>Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Login/Register buttons (if not logged in) -->
+        <ng-template #loginButtons>
+          <div class="d-flex">
+            <a class="btn btn-outline-light me-2" routerLink="/login">Login</a>
+            <a class="btn btn-light" routerLink="/register">Register</a>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </nav>
+</header>

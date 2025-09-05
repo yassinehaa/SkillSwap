@@ -1,0 +1,42 @@
+<div class="container page-container fade-in">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Request a Skill</h4>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()" #requestForm="ngForm">
+            <div class="mb-3">
+              <label for="skillId" class="form-label">Skill</label>
+              <input type="text" class="form-control" id="skillId" name="skillId" [(ngModel)]="request.skillId" required>
+            </div>
+            <div class="mb-3">
+              <label for="message" class="form-label">Message</label>
+              <textarea class="form-control" id="message" name="message" rows="3" [(ngModel)]="request.message" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Payment Method</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="skill_exchange" value="skill_exchange" [(ngModel)]="request.paymentMethod">
+                <label class="form-check-label" for="skill_exchange">
+                  Skill Exchange
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="paypal" value="paypal" [(ngModel)]="request.paymentMethod">
+                <label class="form-check-label" for="paypal">
+                  PayPal
+                </label>
+              </div>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-outline-secondary me-md-2" (click)="cancel()">Cancel</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!requestForm.form.valid">Submit Request</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

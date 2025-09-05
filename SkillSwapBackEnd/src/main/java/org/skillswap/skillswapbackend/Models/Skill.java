@@ -1,5 +1,6 @@
 package org.skillswap.skillswapbackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class Skill {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties("skills")
     private User user;
 
     public enum SkillType {

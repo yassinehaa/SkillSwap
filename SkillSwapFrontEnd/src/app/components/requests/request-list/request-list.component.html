@@ -1,0 +1,18 @@
+
+<div class="container mt-5">
+  <h2>Received Requests</h2>
+  <div *ngIf="requests.length === 0" class="alert alert-info" role="alert">
+    You have no received requests.
+  </div>
+  <ul class="list-group">
+    <li *ngFor="let request of requests" class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <strong>{{ request.requester.firstName }} {{ request.requester.lastName }}</strong> wants to learn <strong>{{ request.skill.name }}</strong>.
+      </div>
+      <div>
+        <button class="btn btn-success me-2" (click)="acceptRequest(request)" [disabled]="request.status !== 'PENDING'">Accept</button>
+        <button class="btn btn-danger" (click)="rejectRequest(request)" [disabled]="request.status !== 'PENDING'">Reject</button>
+      </div>
+    </li>
+  </ul>
+</div>

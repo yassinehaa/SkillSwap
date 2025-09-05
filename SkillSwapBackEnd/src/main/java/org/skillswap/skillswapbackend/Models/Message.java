@@ -1,5 +1,6 @@
 package org.skillswap.skillswapbackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,10 +25,12 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
+    @JsonIgnoreProperties({"sentMessages", "receivedMessages"})
     private User sender;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id", nullable = false)
+    @JsonIgnoreProperties({"sentMessages", "receivedMessages"})
     private User receiver;
 
     @Column(nullable = false)

@@ -1,4 +1,6 @@
-<div class="send-container">
-  <input type="text" [(ngModel)]="content" placeholder="Type a message..." (keyup.enter)="sendMessage()">
-  <button (click)="sendMessage()">Send</button>
+<div class="send-container input-group mb-3">
+  <input type="text" class="form-control" [(ngModel)]="content" placeholder="Type a message..." (keyup.enter)="sendMessage()">
+  <button class="btn btn-primary" (click)="sendMessage()">
+    <i class="bi bi-send-fill"></i> Send
+  </button>
 </div>

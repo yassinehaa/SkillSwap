@@ -88,6 +88,13 @@ public class UserService {
         return modelMapper.map(user, UserDTO.class);
     }
 
+    public void updateUserPremiumStatus(String username, boolean isPremium) {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setPremium(isPremium);
+        userRepository.save(user);
+    }
+
     public List<UserDTO> getPremiumUsers() {
         return userRepository.findByIsPremiumTrueOrderById()
                 .stream()

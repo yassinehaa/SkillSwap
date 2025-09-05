@@ -1,3 +1,70 @@
 
+/* Global Styles */
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* Custom Bootstrap Overrides */
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.card {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-control:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Custom Classes */
+.page-container {
+  padding: 2rem 1rem;
+}
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #212529;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 50px;
+  background-color: #0d6efd;
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

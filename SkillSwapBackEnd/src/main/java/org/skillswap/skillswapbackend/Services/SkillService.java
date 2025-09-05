@@ -78,7 +78,7 @@ public class SkillService {
                 .toList();
     }
     public List<SkillSearchResultDTO> getSkillsByName(String name) {
-        return skillRepository.findByName(name)
+        return skillRepository.findByNameAndType(name, Skill.SkillType.OFFERED)
                 .stream()
                 .map(skill -> {
                     SkillDTO skillDTO = modelMapper.map(skill, SkillDTO.class);

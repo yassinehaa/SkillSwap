@@ -13,4 +13,15 @@ public class MessageDTO {
     private Long receiverId;
     private String content;
     private Date timestamp;
+
+    public MessageDTO(Long id, Long senderId, Long receiverId, String content, Date timestamp) {
+        this.id = id;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.content = content;
+        this.timestamp = timestamp;
+    }
+
+    public MessageDTO() {
+    }
 }

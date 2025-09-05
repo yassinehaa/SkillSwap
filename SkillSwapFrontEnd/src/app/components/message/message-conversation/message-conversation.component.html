@@ -1,6 +1,21 @@
-<div class="conversation-container">
-  <div *ngFor="let message of messages" class="message" [ngClass]="{'sent': message.senderId === userId, 'received': message.senderId !== userId}">
-    <p>{{ message.content }}</p>
-    <span>{{ message.timestamp | date:'short' }}</span>
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      Conversation
+    </div>
+    <div class="card-body message-container">
+      <div *ngFor="let message of messages" class="message-item" [ngClass]="{'sent': message.senderId === currentUser?.id, 'received': message.senderId !== currentUser?.id}">
+        <div class="message-content">
+          <p>{{ message.content }}</p>
+          <small class="text-muted">{{ message.timestamp | date:'short' }}</small>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Type your message..." [(ngModel)]="newMessageContent" (keyup.enter)="sendMessage()">
+        <button class="btn btn-primary" (click)="sendMessage()">Send</button>
+      </div>
+    </div>
   </div>
 </div>

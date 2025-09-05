@@ -1,22 +1,47 @@
-.conversation-container {
-  height: 300px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  padding: 10px;
-}
-
-.message {
-  margin-bottom: 10px;
-  padding: 5px;
+.message-container {
+  height: 400px;
+  overflow-y: scroll;
+  padding: 15px;
+  background-color: #f8f9fa;
   border-radius: 5px;
 }
 
-.sent {
-  background-color: #dcf8c6;
-  align-self: flex-end;
+.message-item {
+  display: flex;
+  margin-bottom: 10px;
 }
 
-.received {
-  background-color: #f1f0f0;
-  align-self: flex-start;
+.message-item.sent {
+  justify-content: flex-end;
+}
+
+.message-item.received {
+  justify-content: flex-start;
+}
+
+.message-content {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  word-wrap: break-word;
+}
+
+.message-item.sent .message-content {
+  background-color: #007bff;
+  color: white;
+}
+
+.message-item.received .message-content {
+  background-color: #e2e6ea;
+  color: #212529;
+}
+
+.message-content p {
+  margin-bottom: 5px;
+}
+
+.message-content small {
+  display: block;
+  text-align: right;
+  font-size: 0.75em;
 }

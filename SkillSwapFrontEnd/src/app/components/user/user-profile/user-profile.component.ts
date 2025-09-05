@@ -6,15 +6,19 @@ import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {User} from '../../../models/user.model';
 import {UserService} from '../../../services/user.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Skill} from '../../../models/skill.model';
 
 import { MessageService } from '../../../services/message.service';
 
+import { Request } from '../../../models/request.model';
+import { RequestService } from '../../../services/request.service';
+import { PaypalComponent } from '../../payment/paypal/paypal.component';
+
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MessageConversationComponent, MessageSendComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MessageConversationComponent, MessageSendComponent, PaypalComponent],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
@@ -26,8 +30,9 @@ export class UserProfileComponent implements OnInit {
   newProposedSkill = '';
   newSearchedSkill = '';
   errorMessage: string | null = null;
+  receivedRequests: Request[] = [];
 
-  constructor(private userService: UserService, private fb: FormBuilder, private route: ActivatedRoute, private messageService: MessageService) {
+  constructor(private userService: UserService, private fb: FormBuilder, private route: ActivatedRoute, private messageService: MessageService, private requestService: RequestService, private authService: AuthService, private router: Router) {
     this.profileForm = this.fb.group({
       isPremium: [false],
       proposedSkills: this.fb.array([]),
@@ -36,18 +41,27 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getUser().subscribe(user => {
-      this.currentUser = user;
-      if (this.currentUser) {
-        this.messageService.connect(this.currentUser.id);
+    this.route.data.subscribe(data => {
+      this.user = data['user'];
+      if (this.user) {
+        this.profileForm.patchValue({
+          isPremium: this.user.isPremium
+        });
+        if (this.user.proposedSkills) {
+          this.setSkills(this.user.proposedSkills, 'proposedSkills');
+        }
+        if (this.user.searchedSkills) {
+          this.setSkills(this.user.searchedSkills, 'searchedSkills');
+        }
       }
     });
-    this.route.paramMap.subscribe(params => {
-      const userId = params.get('id');
-      if (userId) {
-        this.loadUserProfile(Number(userId));
-      } else {
-        this.loadUserProfile();
+
+    this.authService.getCurrentUser().subscribe((user: User) => {
+      this.currentUser = user;
+      if (this.currentUser && this.user && this.currentUser.id === this.user.id && this.user.id) {
+        this.requestService.getRequests(this.user.id).subscribe(requests => {
+          this.receivedRequests = requests;
+        });
       }
     });
   }
@@ -59,30 +73,6 @@ export class UserProfileComponent implements OnInit {
 
   get searchedSkills(): FormArray {
     return this.profileForm.get('searchedSkills') as FormArray;
-  }
-
-  // Load user profile
-  loadUserProfile(userId?: number): void {
-    const userObservable = userId ? this.userService.getUserById(userId) : this.userService.getUser();
-    userObservable.subscribe({
-      next: (user) => {
-        this.user = user;
-        this.profileForm.patchValue({
-          isPremium: user.isPremium
-        });
-        if (user.proposedSkills) {
-          this.setSkills(user.proposedSkills, 'proposedSkills');
-        }
-        if (user.searchedSkills) {
-          this.setSkills(user.searchedSkills, 'searchedSkills');
-        }
-        this.errorMessage = null;
-      },
-      error: (error) => {
-        console.error('Error fetching user:', error);
-        this.errorMessage = 'Failed to load user profile. Please try again.';
-      }
-    });
   }
 
   // Set skills in form array
@@ -142,5 +132,42 @@ export class UserProfileComponent implements OnInit {
   toggleEdit(): void {
     this.isEditing = !this.isEditing;
     this.errorMessage = null;
+  }
+
+  requestToLearn(skill: Skill): void {
+    if (this.currentUser && this.user) {
+      const request = {
+        requesterId: this.currentUser.id,
+        receiverId: this.user.id,
+        skillId: skill.id,
+        status: 'PENDING'
+      };
+      this.requestService.sendRequest(request).subscribe({
+        next: () => {
+          console.log('Request sent successfully');
+        },
+        error: (error) => {
+          console.error('Error sending request:', error);
+        }
+      });
+    }
+  }
+
+  acceptRequest(request: Request): void {
+    this.requestService.acceptRequest(request).subscribe(() => {
+      request.status = 'ACCEPTED';
+    });
+  }
+
+  rejectRequest(request: Request): void {
+    this.requestService.rejectRequest(request).subscribe(() => {
+      request.status = 'REJECTED';
+    });
+  }
+
+  startConversation(userId: number | undefined): void {
+    if (userId) {
+      this.router.navigate(['/messages', userId]);
+    }
   }
 }

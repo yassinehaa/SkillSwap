@@ -1,13 +1,33 @@
 .send-container {
-  display: flex;
-  margin-top: 10px;
+  margin-top: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-input {
-  flex-grow: 1;
-  padding: 5px;
+.form-control {
+  border: none;
+  padding: 12px 15px;
+  font-size: 14px;
+  transition: all 0.3s ease;
 }
 
-button {
-  padding: 5px 10px;
+.form-control:focus {
+  box-shadow: none;
+  border-color: #007bff;
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+  transform: translateY(-1px);
+}
+
+.bi-send-fill {
+  margin-right: 5px;
 }

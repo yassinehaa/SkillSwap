@@ -1,5 +1,6 @@
 package org.skillswap.skillswapbackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class Availability {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties("availabilities")
     private User user;
 
     @Column(nullable = false)
