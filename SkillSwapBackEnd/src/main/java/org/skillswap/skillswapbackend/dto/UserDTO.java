@@ -17,4 +17,5 @@ public class UserDTO {
     private boolean isAdmin;
     private List<SkillDTO> proposedSkills;
     private List<SkillDTO> searchedSkills;
+    private List<EvaluationDTO> evaluations;
 }

@@ -1,4 +1,5 @@
 import { Skill } from './skill.model';
+import { Evaluation } from './evaluation.model';
 
 export interface User {
   id?: number;
@@ -10,4 +11,5 @@ export interface User {
   isAdmin: boolean;
   proposedSkills?: Skill[];
   searchedSkills?: Skill[];
+  evaluations?: Evaluation[];
 }

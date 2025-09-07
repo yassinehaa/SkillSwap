@@ -32,6 +32,9 @@ public class UserService {
     private SkillService skillService;
 
     @Autowired
+    private EvaluationService evaluationService;
+
+    @Autowired
     private EvaluationRepository evaluationRepository;
 
     @Autowired
@@ -64,6 +67,7 @@ public class UserService {
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
         userDTO.setProposedSkills(skillService.getSkillsByUserIdAndType(id, Skill.SkillType.OFFERED));
         userDTO.setSearchedSkills(skillService.getSkillsByUserIdAndType(id, Skill.SkillType.SEARCHED));
+        userDTO.setEvaluations(evaluationService.getEvaluationsByRatedUserId(id));
         return userDTO;
     }
 
@@ -73,6 +77,7 @@ public class UserService {
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
         userDTO.setProposedSkills(skillService.getSkillsByUserIdAndType(user.getId(), Skill.SkillType.OFFERED));
         userDTO.setSearchedSkills(skillService.getSkillsByUserIdAndType(user.getId(), Skill.SkillType.SEARCHED));
+        userDTO.setEvaluations(evaluationService.getEvaluationsByRatedUserId(user.getId()));
         return userDTO;
     }
 

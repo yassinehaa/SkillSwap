@@ -7,9 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
     @Modifying
     @Transactional
     @Query("DELETE FROM Evaluation e WHERE e.rater.id = :userId OR e.ratedUser.id = :userId")
     void deleteByRaterIdOrRatedUserId(@Param("userId") Long userId);
+
+    List<Evaluation> findByRatedUserId(Long ratedUserId);
 }

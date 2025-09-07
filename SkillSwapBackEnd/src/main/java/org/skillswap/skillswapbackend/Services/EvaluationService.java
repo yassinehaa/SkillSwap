@@ -9,6 +9,8 @@ import org.skillswap.skillswapbackend.dto.EvaluationDTO;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +35,18 @@ public class EvaluationService {
         return toDTO(evaluation);
     }
 
+    public List<EvaluationDTO> getEvaluationsByRatedUserId(Long ratedUserId) {
+        return evaluationRepository.findByRatedUserId(ratedUserId).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
     private EvaluationDTO toDTO(Evaluation evaluation) {
         EvaluationDTO evaluationDTO = new EvaluationDTO();
         evaluationDTO.setId(evaluation.getId());
         evaluationDTO.setRaterId(evaluation.getRater().getId());
+        evaluationDTO.setRaterFirstName(evaluation.getRater().getFirstName());
+        evaluationDTO.setRaterLastName(evaluation.getRater().getLastName());
         evaluationDTO.setRatedUserId(evaluation.getRatedUser().getId());
         evaluationDTO.setRating(evaluation.getRating());
         evaluationDTO.setComment(evaluation.getComment());
