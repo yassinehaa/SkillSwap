@@ -7,6 +7,7 @@ export interface User {
   email: string;
   password?: string;
   isPremium: boolean;
+  isAdmin: boolean;
   proposedSkills?: Skill[];
   searchedSkills?: Skill[];
 }

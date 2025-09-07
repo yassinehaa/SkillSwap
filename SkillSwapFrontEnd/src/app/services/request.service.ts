@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Request } from '../models/request.model';
+import { Skill } from '../models/skill.model';
 
 import { MessageService } from './message.service';
 import { tap } from 'rxjs/operators';
@@ -30,11 +31,23 @@ export class RequestService {
     return this.http.get<Request[]>(`${this.baseUrl}/received/${receiverId}`);
   }
 
+  getRequest(id: number): Observable<Request> {
+    return this.http.get<Request>(`${this.baseUrl}/${id}`);
+  }
+
   acceptRequest(request: Request): Observable<Request> {
     return this.http.put<Request>(`${this.baseUrl}/${request.id}/accept`, {});
   }
 
   rejectRequest(request: Request): Observable<Request> {
     return this.http.put<Request>(`${this.baseUrl}/${request.id}/reject`, {});
+  }
+
+  acceptRequestWithSkillExchange(request: Request, skill: Skill): Observable<Request> {
+    return this.http.put<Request>(`${this.baseUrl}/${request.id}/accept-with-exchange`, { skillId: skill.id });
+  }
+
+  acceptRequestWithPayPal(request: Request): Observable<Request> {
+    return this.http.put<Request>(`${this.baseUrl}/${request.id}/accept-with-paypal`, {});
   }
 }

@@ -1,27 +1,19 @@
 package org.skillswap.skillswapbackend.Controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.skillswap.skillswapbackend.Services.EvaluationService;
 import org.skillswap.skillswapbackend.dto.EvaluationDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/evaluations")
+@RequiredArgsConstructor
 public class EvaluationController {
-    @Autowired
-    private EvaluationService evaluationService;
+    private final EvaluationService evaluationService;
 
-    @PostMapping("/{raterId}/{ratedUserId}")
-    public ResponseEntity<EvaluationDTO> addEvaluation(
-            @PathVariable Long raterId,
-            @PathVariable Long ratedUserId,
-            @RequestBody EvaluationDTO evaluationDTO) {
-        return ResponseEntity.ok(evaluationService.addEvaluation(raterId, ratedUserId, evaluationDTO));
-    }
-
-    @GetMapping("/average/{userId}")
-    public ResponseEntity<Double> getAverageRating(@PathVariable Long userId) {
-        return ResponseEntity.ok(evaluationService.getAverageRating(userId));
+    @PostMapping
+    public ResponseEntity<EvaluationDTO> createEvaluation(@RequestBody EvaluationDTO evaluationDTO) {
+        return ResponseEntity.ok(evaluationService.createEvaluation(evaluationDTO));
     }
 }

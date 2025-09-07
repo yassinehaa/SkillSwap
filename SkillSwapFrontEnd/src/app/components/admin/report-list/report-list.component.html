@@ -1,0 +1,23 @@
+<div class="container mt-5">
+  <h2>Reports</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Reporter ID</th>
+        <th>Reported User ID</th>
+        <th>Reason</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let report of reports">
+        <td>{{ report.id }}</td>
+        <td>{{ report.reporterId }}</td>
+        <td>{{ report.reportedUserId }}</td>
+        <td>{{ report.reason }}</td>
+        <td>{{ report.timestamp | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

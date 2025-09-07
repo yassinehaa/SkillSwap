@@ -6,6 +6,10 @@ import { SearchResultsComponent } from './components/search-results/search-resul
 import { RequestListComponent } from './components/requests/request-list/request-list.component';
 import { UserResolver } from './resolvers/user.resolver';
 import { MessagesComponent } from './components/messages/messages.component';
+import { SkillExchangeComponent } from './components/skill-exchange/skill-exchange.component';
+import { PaypalPaymentComponent } from './components/paypal-payment/paypal-payment.component';
+import { AdminDashboardComponent } from './components/admin/admin-dashboard/admin-dashboard.component';
+import { ReportListComponent } from './components/admin/report-list/report-list.component';
 
 export const routes: Routes = [
   {path : 'login' , component : LoginComponent},
@@ -19,4 +23,8 @@ export const routes: Routes = [
   {path : 'messages' , component : MessagesComponent},
   {path : 'messages/:userId' , loadComponent: () => import('./components/message/message-conversation/message-conversation.component').then(m => m.MessageConversationComponent)},
   {path : 'request-skill' , loadComponent: () => import('./components/requests/request-skill/request-skill.component').then(m => m.RequestSkillComponent)},
+  {path : 'skill-exchange/:id' , component : SkillExchangeComponent},
+  {path : 'paypal-payment/:id' , component : PaypalPaymentComponent},
+  {path : 'admin/dashboard' , component : AdminDashboardComponent},
+  {path : 'admin/reports' , component : ReportListComponent},
 ];

@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './message-conversation.component.html',
   styleUrls: ['./message-conversation.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NgForOf, NgIf]
+  imports: [CommonModule, FormsModule, NgForOf]
 })
 export class MessageConversationComponent implements OnInit, OnDestroy {
   receiverId: number | null = null;

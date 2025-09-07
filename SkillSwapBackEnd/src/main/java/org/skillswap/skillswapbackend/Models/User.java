@@ -34,6 +34,9 @@ public class User {
     @Column(nullable = false)
     private boolean isPremium;
 
+    @Column(nullable = false)
+    private boolean isAdmin;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("user")
     private List<Skill> skills;

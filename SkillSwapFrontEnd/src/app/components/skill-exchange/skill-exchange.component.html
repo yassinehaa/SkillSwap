@@ -1,0 +1,17 @@
+
+<div class="container mt-5">
+  <div *ngIf="request">
+    <h2>Exchange Skill for {{ request.skill.name }}</h2>
+    <p>Select a skill from {{ request.requester.firstName }} {{ request.requester.lastName }} to exchange:</p>
+    <div class="list-group">
+      <a *ngFor="let skill of requesterSkills" href="#" class="list-group-item list-group-item-action" [class.active]="selectedSkill === skill" (click)="selectSkill(skill)">
+        {{ skill.name }}
+      </a>
+    </div>
+    <div class="mt-3">
+      <label for="message" class="form-label">Message (optional)</label>
+      <textarea class="form-control" id="message" rows="3" [(ngModel)]="message"></textarea>
+    </div>
+    <button class="btn btn-primary mt-3" (click)="confirmExchange()" [disabled]="!selectedSkill">Confirm Exchange</button>
+  </div>
+</div>

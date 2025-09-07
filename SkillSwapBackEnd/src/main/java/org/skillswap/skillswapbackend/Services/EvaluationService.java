@@ -1,47 +1,46 @@
 package org.skillswap.skillswapbackend.Services;
 
-import org.modelmapper.ModelMapper;
+import lombok.RequiredArgsConstructor;
 import org.skillswap.skillswapbackend.Models.Evaluation;
 import org.skillswap.skillswapbackend.Models.User;
 import org.skillswap.skillswapbackend.Repositories.EvaluationRepository;
 import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.skillswap.skillswapbackend.dto.EvaluationDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class EvaluationService {
-    @Autowired
-    private EvaluationRepository evaluationRepository;
+    private final EvaluationRepository evaluationRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    public EvaluationDTO addEvaluation(Long raterId, Long ratedUserId, EvaluationDTO evaluationDTO) {
-        if (evaluationDTO.getRating() < 1 || evaluationDTO.getRating() > 5) {
-            throw new RuntimeException("Rating must be between 1 and 5");
-        }
-        User rater = userRepository.findById(raterId)
+    public EvaluationDTO createEvaluation(EvaluationDTO evaluationDTO) {
+        User rater = userRepository.findById(evaluationDTO.getRaterId())
                 .orElseThrow(() -> new RuntimeException("Rater not found"));
-        User ratedUser = userRepository.findById(ratedUserId)
+        User ratedUser = userRepository.findById(evaluationDTO.getRatedUserId())
                 .orElseThrow(() -> new RuntimeException("Rated user not found"));
-        Evaluation evaluation = modelMapper.map(evaluationDTO, Evaluation.class);
+
+        Evaluation evaluation = new Evaluation();
         evaluation.setRater(rater);
         evaluation.setRatedUser(ratedUser);
+        evaluation.setRating(evaluationDTO.getRating());
+        evaluation.setComment(evaluationDTO.getComment());
+        evaluation.setTimestamp(LocalDateTime.now());
+
         evaluation = evaluationRepository.save(evaluation);
-        return modelMapper.map(evaluation, EvaluationDTO.class);
+        return toDTO(evaluation);
     }
 
-    public Double getAverageRating(Long userId) {
-        List<Evaluation> evaluations = evaluationRepository.findByRatedUserId(userId);
-        return evaluations.isEmpty() ? 0.0 : evaluations.stream()
-                .mapToDouble(Evaluation::getRating)
-                .average()
-                .orElse(0.0);
+    private EvaluationDTO toDTO(Evaluation evaluation) {
+        EvaluationDTO evaluationDTO = new EvaluationDTO();
+        evaluationDTO.setId(evaluation.getId());
+        evaluationDTO.setRaterId(evaluation.getRater().getId());
+        evaluationDTO.setRatedUserId(evaluation.getRatedUser().getId());
+        evaluationDTO.setRating(evaluation.getRating());
+        evaluationDTO.setComment(evaluation.getComment());
+        evaluationDTO.setTimestamp(evaluation.getTimestamp());
+        return evaluationDTO;
     }
 }

@@ -1,6 +1,3 @@
-import { MessageConversationComponent } from '../../message/message-conversation/message-conversation.component';
-import { MessageSendComponent } from '../../message/message-send/message-send.component';
-import { AuthService } from '../../../services/auth.service';
 import {CommonModule} from '@angular/common';
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -10,15 +7,18 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Skill} from '../../../models/skill.model';
 
 import { MessageService } from '../../../services/message.service';
+import { ReportService } from '../../../services/report.service';
+import { EvaluationService } from '../../../services/evaluation.service';
 
 import { Request } from '../../../models/request.model';
 import { RequestService } from '../../../services/request.service';
 import { PaypalComponent } from '../../payment/paypal/paypal.component';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MessageConversationComponent, MessageSendComponent, PaypalComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PaypalComponent],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
@@ -31,8 +31,11 @@ export class UserProfileComponent implements OnInit {
   newSearchedSkill = '';
   errorMessage: string | null = null;
   receivedRequests: Request[] = [];
+  reportReason: string = '';
+  userRating: number = 0;
+  ratingComment: string = '';
 
-  constructor(private userService: UserService, private fb: FormBuilder, private route: ActivatedRoute, private messageService: MessageService, private requestService: RequestService, private authService: AuthService, private router: Router) {
+  constructor(private userService: UserService, private fb: FormBuilder, private route: ActivatedRoute, private requestService: RequestService, private authService: AuthService, private router: Router, private reportService: ReportService, private evaluationService: EvaluationService) {
     this.profileForm = this.fb.group({
       isPremium: [false],
       proposedSkills: this.fb.array([]),
@@ -45,7 +48,8 @@ export class UserProfileComponent implements OnInit {
       this.user = data['user'];
       if (this.user) {
         this.profileForm.patchValue({
-          isPremium: this.user.isPremium
+          isPremium: this.user.isPremium,
+          isAdmin: this.user.isAdmin
         });
         if (this.user.proposedSkills) {
           this.setSkills(this.user.proposedSkills, 'proposedSkills');
@@ -110,6 +114,7 @@ export class UserProfileComponent implements OnInit {
         lastName: this.user.lastName,
         email: this.user.email, // Preserve existing email
         isPremium: this.profileForm.value.isPremium,
+        isAdmin: this.user.isAdmin, // Include isAdmin property
         proposedSkills: this.proposedSkills.value.map((name: string) => ({ name, type: 'OFFERED' })),
         searchedSkills: this.searchedSkills.value.map((name: string) => ({ name, type: 'SEARCHED' }))
       };
@@ -119,7 +124,7 @@ export class UserProfileComponent implements OnInit {
           this.isEditing = false;
           this.errorMessage = null;
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error updating profile:', error);
           this.errorMessage = 'Failed to update profile. Please try again.';
         }
@@ -146,7 +151,7 @@ export class UserProfileComponent implements OnInit {
         next: () => {
           console.log('Request sent successfully');
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error sending request:', error);
         }
       });
@@ -170,4 +175,54 @@ export class UserProfileComponent implements OnInit {
       this.router.navigate(['/messages', userId]);
     }
   }
+
+    submitReport(): void {
+    if (this.user && this.currentUser && this.reportReason.trim() && this.currentUser.id && this.user.id) {
+      const report = {
+        reporterId: this.currentUser.id,
+        reportedUserId: this.user.id,
+        reason: this.reportReason.trim()
+      };
+      this.reportService.createReport(report).subscribe({
+        next: () => {
+          console.log('Report submitted successfully');
+          this.reportReason = '';
+          // Close the modal (you'll need to add Bootstrap JS for this)
+        },
+        error: (error: any) => {
+          console.error('Error submitting report:', error);
+        }
+      });
+    } else {
+      console.error('Cannot submit report: Missing user, current user, or reason.');
+    }
+  }
+
+
+  rateUser(rating: number): void {
+    this.userRating = rating;
+  }
+
+  submitRating(): void {
+    if (this.user && this.currentUser && this.userRating > 0) {
+      const evaluation = {
+        raterId: this.currentUser.id,
+        ratedUserId: this.user.id,
+        rating: this.userRating,
+        comment: this.ratingComment.trim()
+      };
+      this.evaluationService.createEvaluation(evaluation).subscribe({
+        next: () => {
+          console.log('Rating submitted successfully');
+          this.userRating = 0;
+          this.ratingComment = '';
+        },
+        error: (error: any) => {
+          console.error('Error submitting rating:', error);
+        }
+      });
+    }
+  }
 }
+
+

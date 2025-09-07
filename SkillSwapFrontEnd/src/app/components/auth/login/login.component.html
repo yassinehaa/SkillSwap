@@ -1,95 +1,27 @@
-<div class="d-flex flex-column min-vh-100 bg-white" style="font-family: Manrope, 'Noto Sans', sans-serif;">
-
-
-
-
-
-  <main class="flex-grow-1 d-flex justify-content-center align-items-center px-4">
-
-    <div class="w-100" style="max-width: 512px;">
-
-      <h2 class="text-center fw-bold mb-4" style="font-size: 28px;">Welcome back</h2>
-
-      <form (ngSubmit)="onSubmit()">
-
-        <div class="mb-3">
-
-          <label for="email" class="form-label fw-medium">Email</label>
-
-          <input
-
-            type="email"
-
-            id="email"
-
-            name="email"
-
-            [(ngModel)]="email"
-
-            placeholder="Email"
-
-            required
-
-            class="form-control border"
-
-            style="border-radius: 12px; height: 56px; border-color: #dde1e3;"
-
-          />
-
+<div class="container-fluid login-container">
+  <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-center">Welcome back</h2>
+          <form (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="Email" required class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" id="password" name="password" [(ngModel)]="password" placeholder="Password" required class="form-control">
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary login-button">Log in</button>
+            </div>
+          </form>
+          <div class="text-center mt-3">
+            <a routerLink="/register" class="signup-link">Don't have an account? Sign up</a>
+          </div>
         </div>
-
-        <div class="mb-2">
-
-          <label for="password" class="form-label fw-medium">Password</label>
-
-          <input
-
-            type="password"
-
-            id="password"
-
-            name="password"
-
-            [(ngModel)]="password"
-
-            placeholder="Password"
-
-            required
-
-            class="form-control border"
-
-            style="border-radius: 12px; height: 56px; border-color: #dde1e3;"
-
-          />
-
-        </div>
-
-        <p class="text-muted small mb-3 text-decoration-underline" style="cursor: pointer;">Forgot password?</p>
-
-        <button
-
-          type="submit"
-
-          class="btn fw-bold w-100"
-
-          style="background-color: #dce8f3; border-radius: 12px; height: 48px; color: #121416;"
-
-        >
-
-          Log in
-
-        </button>
-
-      </form>
-
-      <p class="small text-muted text-center mt-3 text-decoration-underline">
-
-        Don't have an account? <a routerLink="/register" class="text-decoration-none">Sign up</a>
-
-      </p>
-
+      </div>
     </div>
-
-  </main>
-
+  </div>
 </div>

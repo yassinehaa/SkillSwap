@@ -10,8 +10,17 @@
         <strong>{{ request.requester.firstName }} {{ request.requester.lastName }}</strong> wants to learn <strong>{{ request.skill.name }}</strong>.
       </div>
       <div>
-        <button class="btn btn-success me-2" (click)="acceptRequest(request)" [disabled]="request.status !== 'PENDING'">Accept</button>
-        <button class="btn btn-danger" (click)="rejectRequest(request)" [disabled]="request.status !== 'PENDING'">Reject</button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" [disabled]="request.status !== 'PENDING'">
+            Accept
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" (click)="acceptWithSkillExchange(request); $event.preventDefault()">With Skill Exchange</a></li>
+            <li><a class="dropdown-item" href="#" (click)="acceptWithPayPal(request); $event.preventDefault()">With PayPal</a></li>
+            <li><a class="dropdown-item" href="#" (click)="acceptRequest(request); $event.preventDefault()">Without Exchange</a></li>
+          </ul>
+        </div>
+        <button class="btn btn-danger ms-2" (click)="rejectRequest(request)" [disabled]="request.status !== 'PENDING'">Reject</button>
       </div>
     </li>
   </ul>

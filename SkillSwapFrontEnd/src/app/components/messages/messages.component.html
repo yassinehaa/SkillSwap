@@ -1,14 +1,21 @@
 
 <div class="container mt-5">
-  <h2>Messages</h2>
-  <div *ngIf="conversations.length === 0" class="alert alert-info" role="alert">
-    You have no messages.
-  </div>
-  <div *ngFor="let conversation of conversations" class="card mb-3" [routerLink]="['/messages', conversation.withUser.id]" style="cursor: pointer;">
-    <div class="card-body">
-      <h5 class="card-title">{{ conversation.withUser.firstName }} {{ conversation.withUser.lastName }}</h5>
-      <p class="card-text">{{ conversation.lastMessage.content }}</p>
-      <p class="card-text"><small class="text-muted">{{ conversation.lastMessage.timestamp | date:'short' }}</small></p>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Messages</h4>
+        </div>
+        <div class="list-group list-group-flush">
+          <a *ngFor="let conversation of conversations" [routerLink]="['/messages', conversation.withUser.id]" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">{{ conversation.withUser.firstName }} {{ conversation.withUser.lastName }}</h5>
+              <small>{{ conversation.lastMessage.timestamp | date:'short' }}</small>
+            </div>
+            <p class="mb-1">{{ conversation.lastMessage.content }}</p>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

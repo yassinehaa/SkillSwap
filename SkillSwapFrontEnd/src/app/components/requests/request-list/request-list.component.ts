@@ -5,7 +5,8 @@ import { Request } from '../../../models/request.model';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/user.model';
 import { MessageService } from '../../../services/message.service';
-import {NgForOf, NgIf} from '@angular/common';
+import { Router } from '@angular/router';
+import {NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-request-list',
@@ -20,7 +21,7 @@ export class RequestListComponent implements OnInit {
   requests: Request[] = [];
   currentUser: User | null = null;
 
-  constructor(private requestService: RequestService, private authService: AuthService, private messageService: MessageService) { }
+  constructor(private requestService: RequestService, private authService: AuthService, private messageService: MessageService, private router: Router) { }
 
   ngOnInit(): void {
     this.authService.getCurrentUser().subscribe(user => {
@@ -54,6 +55,21 @@ export class RequestListComponent implements OnInit {
         content: `Your request to learn ${request.skill.name} has been rejected.`
       };
       this.messageService.sendHttpMessage(message).subscribe();
+    });
+  }
+
+  acceptWithSkillExchange(request: Request): void {
+    this.router.navigate(['/skill-exchange', request.id]);
+  }
+
+  acceptWithPayPal(request: Request): void {
+    const message = {
+      senderId: this.currentUser?.id,
+      receiverId: request.requester.id,
+      content: `Your request to learn ${request.skill.name} has been accepted. Please proceed with the payment.`
+    };
+    this.messageService.sendHttpMessage(message).subscribe(() => {
+      this.router.navigate(['/paypal-payment', request.id]);
     });
   }
 }

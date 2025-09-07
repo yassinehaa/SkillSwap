@@ -1,25 +1,35 @@
-<div class="register-container">
-  <h2>Create an account</h2>
-  <form>
-    <div class="form-group">
-      <label for="firstName">First Name</label>
-      <input type="text" id="firstName" placeholder="Enter your first name" required>
+<div class="container-fluid register-container">
+  <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-center">Create an account</h2>
+          <form (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" id="firstName" name="firstName" [(ngModel)]="firstName" placeholder="First Name" required class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" id="lastName" name="lastName" [(ngModel)]="lastName" placeholder="Last Name" required class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="Email" required class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" id="password" name="password" [(ngModel)]="password" placeholder="Password" required class="form-control">
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary register-button">Sign up</button>
+            </div>
+          </form>
+          <div class="text-center mt-3">
+            <a routerLink="/login" class="login-link">Already have an account? Log in</a>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="lastName">Last Name</label>
-      <input type="text" id="lastName" placeholder="Enter your last name" required>
-    </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" placeholder="Enter your email" required>
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" id="password" placeholder="Enter your password" required>
-    </div>
-    <button (click)="onSubmit()" type="submit" class="register-button">Sign up</button>
-  </form>
-  <div class="login-link">
-    Already have an account? <a routerLink="/login">Log in</a>
   </div>
 </div>

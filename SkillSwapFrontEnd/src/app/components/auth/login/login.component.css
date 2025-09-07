@@ -1,68 +1,33 @@
 .login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  max-width: 400px;
-  margin: 0 auto;
+  background-color: #f8f9fa;
 }
 
-h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
+.card {
+  border: none;
+  border-radius: 1rem;
 }
 
-.form-group {
-  width: 100%;
-  margin-bottom: 15px;
+.card-title {
+  font-weight: 700;
+  margin-bottom: 1.5rem;
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
-  color: #333;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-.forgot-password {
-  align-self: flex-end;
-  color: #1a73e8;
-  text-decoration: none;
-  font-size: 14px;
-  margin-bottom: 15px;
+.form-control {
+  height: 3rem;
+  border-radius: 0.75rem;
 }
 
 .login-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #d3e3f1;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.login-button:hover {
-  background-color: #b0c4de;
+  height: 3rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
 }
 
 .signup-link {
-  font-size: 14px;
-  color: #666;
-}
-
-.signup-link a {
-  color: #1a73e8;
+  color: #6c757d;
   text-decoration: none;
 }
 
-.signup-link a:hover {
+.signup-link:hover {
   text-decoration: underline;
 }

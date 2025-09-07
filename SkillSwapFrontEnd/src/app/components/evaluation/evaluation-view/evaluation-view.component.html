@@ -1,1 +1,27 @@
-<p>evaluation-view works!</p>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title text-center">Evaluations</h2>
+          <ul class="list-group list-group-flush">
+            <li *ngFor="let evaluation of evaluations" class="list-group-item">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ evaluation.user.firstName }} {{ evaluation.user.lastName }}</h5>
+                <small>{{ evaluation.date | date }}</small>
+              </div>
+              <div class="rating">
+                <i class="bi bi-star-fill" [class.filled]="evaluation.rating >= 1"></i>
+                <i class="bi bi-star-fill" [class.filled]="evaluation.rating >= 2"></i>
+                <i class="bi bi-star-fill" [class.filled]="evaluation.rating >= 3"></i>
+                <i class="bi bi-star-fill" [class.filled]="evaluation.rating >= 4"></i>
+                <i class="bi bi-star-fill" [class.filled]="evaluation.rating >= 5"></i>
+              </div>
+              <p class="mb-1">{{ evaluation.comment }}</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -88,4 +88,11 @@ public class SkillService {
                 .toList();
     }
 
+    public List<SkillDTO> getUserSkills(Long userId) {
+        return skillRepository.findByUserId(userId)
+                .stream()
+                .map(skill -> modelMapper.map(skill, SkillDTO.class))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -1,1 +1,30 @@
-<p>evaluation-add works!</p>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title text-center">Add Evaluation</h2>
+          <form (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="rating" class="form-label">Rating</label>
+              <div class="rating">
+                <i class="bi bi-star-fill" [class.filled]="rating >= 1" (click)="rate(1)"></i>
+                <i class="bi bi-star-fill" [class.filled]="rating >= 2" (click)="rate(2)"></i>
+                <i class="bi bi-star-fill" [class.filled]="rating >= 3" (click)="rate(3)"></i>
+                <i class="bi bi-star-fill" [class.filled]="rating >= 4" (click)="rate(4)"></i>
+                <i class="bi bi-star-fill" [class.filled]="rating >= 5" (click)="rate(5)"></i>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="comment" class="form-label">Comment</label>
+              <textarea id="comment" name="comment" [(ngModel)]="comment" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

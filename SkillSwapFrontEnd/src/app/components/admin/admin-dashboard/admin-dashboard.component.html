@@ -1,0 +1,32 @@
+<div class="container mt-5">
+  <h2>Admin Dashboard</h2>
+  <div class="mb-3">
+    <a routerLink="/admin/reports" class="btn btn-info">View Reports</a>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Is Premium</th>
+        <th>Is Admin</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.isPremium }}</td>
+        <td>{{ user.isAdmin }}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" (click)="user.id !== undefined && deleteUser(user.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

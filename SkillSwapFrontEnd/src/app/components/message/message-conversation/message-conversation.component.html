@@ -1,20 +1,22 @@
 <div class="container mt-5">
-  <div class="card">
-    <div class="card-header">
-      Conversation
+  <div class="card chat-card">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Conversation</h4>
     </div>
-    <div class="card-body message-container">
+    <div class="card-body message-container" #messageContainer>
       <div *ngFor="let message of messages" class="message-item" [ngClass]="{'sent': message.senderId === currentUser?.id, 'received': message.senderId !== currentUser?.id}">
-        <div class="message-content">
-          <p>{{ message.content }}</p>
-          <small class="text-muted">{{ message.timestamp | date:'short' }}</small>
+        <div class="message-bubble">
+          <p class="message-text">{{ message.content }}</p>
+          <small class="message-timestamp">{{ message.timestamp | date:'short' }}</small>
         </div>
       </div>
     </div>
     <div class="card-footer">
       <div class="input-group">
         <input type="text" class="form-control" placeholder="Type your message..." [(ngModel)]="newMessageContent" (keyup.enter)="sendMessage()">
-        <button class="btn btn-primary" (click)="sendMessage()">Send</button>
+        <button class="btn btn-primary" (click)="sendMessage()">
+          <i class="bi bi-send"></i>
+        </button>
       </div>
     </div>
   </div>

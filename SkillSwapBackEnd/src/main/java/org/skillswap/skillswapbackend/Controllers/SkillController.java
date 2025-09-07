@@ -31,4 +31,9 @@ public class SkillController {
         return ResponseEntity.ok(skillService.getSkillsByName(name));
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<SkillDTO>> getUserSkills(@PathVariable Long userId) {
+        return ResponseEntity.ok(skillService.getUserSkills(userId));
+    }
+
 }

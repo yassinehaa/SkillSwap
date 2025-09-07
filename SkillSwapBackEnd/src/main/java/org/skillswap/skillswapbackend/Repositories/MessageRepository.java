@@ -2,8 +2,10 @@ package org.skillswap.skillswapbackend.Repositories;
 
 import org.skillswap.skillswapbackend.Models.Message;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,4 +15,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query("SELECT m FROM Message m WHERE m.sender.id = :userId OR m.receiver.id = :userId ORDER BY m.timestamp DESC")
     List<Message> findConversations(@Param("userId") Long userId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Message m WHERE m.sender.id = :userId OR m.receiver.id = :userId")
+    void deleteBySenderIdOrReceiverId(@Param("userId") Long userId);
 }

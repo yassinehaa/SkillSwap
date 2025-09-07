@@ -39,7 +39,7 @@ export class UserService {
   }
 
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl, { headers: this.getHeaders() }).pipe(
+    return this.http.get<User[]>(`${this.apiUrl}/all`, { headers: this.getHeaders() }).pipe(
       catchError(this.handleError)
     );
   }
@@ -47,5 +47,11 @@ export class UserService {
   private handleError(error: any): Observable<never> {
     console.error('An error occurred', error);
     return throwError(() => new Error(error.message || 'Server error'));
+  }
+
+  deleteUser(id: number) {
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() }).pipe(
+      catchError(this.handleError)
+    );
   }
 }

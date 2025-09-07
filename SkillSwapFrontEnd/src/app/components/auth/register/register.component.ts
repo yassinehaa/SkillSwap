@@ -1,39 +1,35 @@
 import { Component } from '@angular/core';
-import {User} from '../../../models/user.model';
-import {FormsModule} from '@angular/forms';
-import {AuthService} from "../../../services/auth.service";
-import {Router, RouterLink} from "@angular/router";
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
-  imports: [
-    FormsModule,
-    RouterLink
-  ],
   templateUrl: './register.component.html',
   standalone: true,
-  styleUrl: './register.component.css'
+  imports: [FormsModule],
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  user: User = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    isPremium: false
-  };
+  firstName!: string;
+  lastName!: string;
+  email!: string;
+  password!: string;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
-  onSubmit() {
-    this.authService.register(this.user).subscribe({
-      next: (response) => {
-        console.log('Registration successful', response);
-        this.router.navigate(['/login']);
-      },
-      error: (error) => {
-        console.error('Registration failed', error);
-      }
+  onSubmit(): void {
+    const user = {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      password: this.password,
+      isPremium: false,
+      isAdmin: false
+    };
+    this.authService.register(user).subscribe(() => {
+      this.router.navigate(['/login']);
     });
   }
 }
+

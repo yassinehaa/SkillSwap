@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +20,7 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
@@ -41,7 +43,9 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/users/current", "/messages/**").authenticated()
-                        .requestMatchers("/api/users/register", "/api/users/login", "/api/users", "/api/skills/search", "/api/skills", "/ws/**", "/api/requests").permitAll()
+                        .requestMatchers("/api/users/all").hasRole("ADMIN")
+                        .requestMatchers("/api/users/register", "/api/users/login", "/api/skills/search", "/api/skills", "/ws/**", "/api/requests").permitAll()
+                        .requestMatchers("/api/users/**").permitAll() // Permit all requests to /api/users and its sub-paths
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

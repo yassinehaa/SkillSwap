@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/requests")
@@ -31,6 +32,11 @@ public class RequestController {
         return ResponseEntity.ok(requestService.getRequestsByReceiverId(receiverId));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<RequestDetailsDTO> getRequestById(@PathVariable Long id) {
+        return ResponseEntity.ok(requestService.getRequestById(id));
+    }
+
     @PutMapping("/{requestId}/accept")
     public ResponseEntity<RequestDetailsDTO> acceptRequest(@PathVariable Long requestId) {
         return ResponseEntity.ok(requestService.acceptRequest(requestId));
@@ -39,5 +45,16 @@ public class RequestController {
     @PutMapping("/{requestId}/reject")
     public ResponseEntity<RequestDetailsDTO> rejectRequest(@PathVariable Long requestId) {
         return ResponseEntity.ok(requestService.rejectRequest(requestId));
+    }
+
+    @PutMapping("/{requestId}/accept-with-exchange")
+    public ResponseEntity<RequestDetailsDTO> acceptRequestWithSkillExchange(@PathVariable Long requestId, @RequestBody Map<String, Long> payload) {
+        Long skillId = payload.get("skillId");
+        return ResponseEntity.ok(requestService.acceptRequestWithSkillExchange(requestId, skillId));
+    }
+
+    @PutMapping("/{requestId}/accept-with-paypal")
+    public ResponseEntity<RequestDetailsDTO> acceptRequestWithPayPal(@PathVariable Long requestId) {
+        return ResponseEntity.ok(requestService.acceptRequestWithPayPal(requestId));
     }
 }

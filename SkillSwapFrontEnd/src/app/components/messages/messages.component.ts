@@ -12,7 +12,6 @@ import {RouterLink} from '@angular/router';
   templateUrl: './messages.component.html',
   imports: [
     NgForOf,
-    NgIf,
     RouterLink,
     DatePipe
   ],

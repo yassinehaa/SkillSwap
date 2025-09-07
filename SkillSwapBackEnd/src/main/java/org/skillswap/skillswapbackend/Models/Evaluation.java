@@ -1,33 +1,33 @@
 package org.skillswap.skillswapbackend.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "evaluations")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Evaluation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "rater_id", nullable = false)
-    @JsonIgnoreProperties("evaluations")
+    @JoinColumn(name = "rater_id")
     private User rater;
 
     @ManyToOne
-    @JoinColumn(name = "rated_user_id", nullable = false)
-    @JsonIgnoreProperties("evaluations")
+    @JoinColumn(name = "rated_user_id")
     private User ratedUser;
 
-    @Column(nullable = false)
     private int rating;
 
     private String comment;
+
+    private LocalDateTime timestamp;
 }

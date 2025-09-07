@@ -3,6 +3,11 @@ package org.skillswap.skillswapbackend.Services;
 import org.modelmapper.ModelMapper;
 import org.skillswap.skillswapbackend.Models.Skill;
 import org.skillswap.skillswapbackend.Models.User;
+import org.skillswap.skillswapbackend.Repositories.AvailabilityRepository;
+import org.skillswap.skillswapbackend.Repositories.EvaluationRepository;
+import org.skillswap.skillswapbackend.Repositories.MessageRepository;
+import org.skillswap.skillswapbackend.Repositories.ReportRepository;
+import org.skillswap.skillswapbackend.repository.RequestRepository;
 import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.skillswap.skillswapbackend.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +31,21 @@ public class UserService {
     @Autowired
     private SkillService skillService;
 
+    @Autowired
+    private EvaluationRepository evaluationRepository;
+
+    @Autowired
+    private ReportRepository reportRepository;
+
+    @Autowired
+    private MessageRepository messageRepository;
+
+    @Autowired
+    private AvailabilityRepository availabilityRepository;
+
+    @Autowired
+    private RequestRepository requestRepository;
+
     public UserDTO createUser(UserDTO userDTO) {
         if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists");
@@ -33,6 +53,7 @@ public class UserService {
         User user = modelMapper.map(userDTO, User.class);
         user.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Encode password
         user.setPremium(false); // Default to non-Premium
+        user.setAdmin(false); // Default to non-Admin
         user = userRepository.save(user);
         return modelMapper.map(user, UserDTO.class);
     }
@@ -55,6 +76,12 @@ public class UserService {
         return userDTO;
     }
 
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> modelMapper.map(user, UserDTO.class))
+                .collect(Collectors.toList());
+    }
+
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -66,6 +93,7 @@ public class UserService {
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         user.setPremium(userDTO.isPremium());
+        user.setAdmin(userDTO.isAdmin());
 
         // Update skills
         skillService.deleteSkillsByUserId(id);
@@ -78,6 +106,18 @@ public class UserService {
 
         user = userRepository.save(user);
         return modelMapper.map(user, UserDTO.class);
+    }
+
+    public void deleteUser(Long id) {
+        // Delete related records first
+        evaluationRepository.deleteByRaterIdOrRatedUserId(id);
+        reportRepository.deleteByReporterIdOrReportedUserId(id);
+        messageRepository.deleteBySenderIdOrReceiverId(id);
+        availabilityRepository.deleteByUserId(id);
+        requestRepository.deleteByRequesterIdOrReceiverId(id);
+        skillService.deleteSkillsByUserId(id);
+
+        userRepository.deleteById(id);
     }
 
     public UserDTO togglePremium(Long id) {

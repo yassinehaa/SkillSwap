@@ -2,7 +2,7 @@
 package org.skillswap.skillswapbackend.Services;
 
 import lombok.RequiredArgsConstructor;
-import org.skillswap.skillswapbackend.Services.MessageService;
+
 import org.skillswap.skillswapbackend.dto.MessageDTO;
 import org.skillswap.skillswapbackend.dto.RequestDetailsDTO;
 import org.skillswap.skillswapbackend.mappers.RequestMapper;
@@ -40,6 +40,12 @@ public class RequestServiceImpl implements org.skillswap.skillswapbackend.servic
     }
 
     @Override
+    public RequestDetailsDTO getRequestById(Long id) {
+        Request request = requestRepository.findById(id).orElseThrow(() -> new RuntimeException("Request not found"));
+        return requestMapper.toDetailsDTO(request);
+    }
+
+    @Override
     public RequestDetailsDTO acceptRequest(Long requestId) {
         Request request = requestRepository.findById(requestId).orElseThrow(() -> new RuntimeException("Request not found"));
         request.setStatus("ACCEPTED");
@@ -51,6 +57,25 @@ public class RequestServiceImpl implements org.skillswap.skillswapbackend.servic
     public RequestDetailsDTO rejectRequest(Long requestId) {
         Request request = requestRepository.findById(requestId).orElseThrow(() -> new RuntimeException("Request not found"));
         request.setStatus("REJECTED");
+        Request savedRequest = requestRepository.save(request);
+        return requestMapper.toDetailsDTO(savedRequest);
+    }
+
+    @Override
+    public RequestDetailsDTO acceptRequestWithSkillExchange(Long requestId, Long skillId) {
+        Request request = requestRepository.findById(requestId).orElseThrow(() -> new RuntimeException("Request not found"));
+        request.setStatus("ACCEPTED");
+        request.setPaymentMethod("SKILL_EXCHANGE");
+        // You might want to store the exchanged skill id somewhere
+        Request savedRequest = requestRepository.save(request);
+        return requestMapper.toDetailsDTO(savedRequest);
+    }
+
+    @Override
+    public RequestDetailsDTO acceptRequestWithPayPal(Long requestId) {
+        Request request = requestRepository.findById(requestId).orElseThrow(() -> new RuntimeException("Request not found"));
+        request.setStatus("ACCEPTED");
+        request.setPaymentMethod("PAYPAL");
         Request savedRequest = requestRepository.save(request);
         return requestMapper.toDetailsDTO(savedRequest);
     }
