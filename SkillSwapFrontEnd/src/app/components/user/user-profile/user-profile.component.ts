@@ -12,13 +12,13 @@ import { EvaluationService } from '../../../services/evaluation.service';
 
 import { Request } from '../../../models/request.model';
 import { RequestService } from '../../../services/request.service';
-import { PaypalComponent } from '../../payment/paypal/paypal.component';
+
 import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, PaypalComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
@@ -37,7 +37,7 @@ export class UserProfileComponent implements OnInit {
 
   constructor(private userService: UserService, private fb: FormBuilder, private route: ActivatedRoute, private requestService: RequestService, private authService: AuthService, private router: Router, private reportService: ReportService, private evaluationService: EvaluationService) {
     this.profileForm = this.fb.group({
-      isPremium: [false],
+      
       proposedSkills: this.fb.array([]),
       searchedSkills: this.fb.array([])
     });
@@ -48,7 +48,7 @@ export class UserProfileComponent implements OnInit {
       this.user = data['user'];
       if (this.user) {
         this.profileForm.patchValue({
-          isPremium: this.user.isPremium,
+          
           isAdmin: this.user.isAdmin
         });
         if (this.user.proposedSkills) {
@@ -113,7 +113,7 @@ export class UserProfileComponent implements OnInit {
         firstName: this.user.firstName,
         lastName: this.user.lastName,
         email: this.user.email, // Preserve existing email
-        isPremium: this.profileForm.value.isPremium,
+        
         isAdmin: this.user.isAdmin, // Include isAdmin property
         proposedSkills: this.proposedSkills.value.map((name: string) => ({ name, type: 'OFFERED' })),
         searchedSkills: this.searchedSkills.value.map((name: string) => ({ name, type: 'SEARCHED' }))

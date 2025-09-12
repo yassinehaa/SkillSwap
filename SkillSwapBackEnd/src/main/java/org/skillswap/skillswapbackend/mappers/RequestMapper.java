@@ -4,7 +4,7 @@ package org.skillswap.skillswapbackend.mappers;
 import org.modelmapper.ModelMapper;
 import org.skillswap.skillswapbackend.dto.RequestDTO;
 import org.skillswap.skillswapbackend.dto.RequestDetailsDTO;
-import org.skillswap.skillswapbackend.models.Request;
+import org.skillswap.skillswapbackend.Models.Request;
 import org.skillswap.skillswapbackend.Repositories.SkillRepository;
 import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.springframework.stereotype.Component;

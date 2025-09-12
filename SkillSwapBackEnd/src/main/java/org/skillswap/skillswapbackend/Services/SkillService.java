@@ -5,6 +5,7 @@ import org.skillswap.skillswapbackend.Models.Skill;
 import org.skillswap.skillswapbackend.Models.User;
 import org.skillswap.skillswapbackend.Repositories.SkillRepository;
 import org.skillswap.skillswapbackend.Repositories.UserRepository;
+import org.skillswap.skillswapbackend.Repositories.RequestRepository;
 import org.skillswap.skillswapbackend.dto.SkillDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ public class SkillService {
     private UserRepository userRepository;
 
     @Autowired
+    private RequestRepository requestRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     public SkillDTO addSkill(Long userId, SkillDTO skillDTO) {
@@ -38,6 +42,10 @@ public class SkillService {
 
     @Transactional
     public void deleteSkillsByUserId(Long userId) {
+        List<Skill> skills = skillRepository.findByUserId(userId);
+        for (Skill skill : skills) {
+            requestRepository.deleteBySkillId(skill.getId());
+        }
         skillRepository.deleteByUserId(userId);
     }
 
@@ -95,4 +103,7 @@ public class SkillService {
                 .collect(Collectors.toList());
     }
 
+    public List<Skill> getSkillObjectsByUserId(Long userId) {
+        return skillRepository.findByUserId(userId);
+    }
 }

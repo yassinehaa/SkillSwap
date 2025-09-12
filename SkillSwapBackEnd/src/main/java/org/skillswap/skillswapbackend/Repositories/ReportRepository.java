@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ReportRepository extends JpaRepository<Report, Long> {
     @Modifying
     @Transactional
-    @Query("DELETE FROM Report r WHERE r.reporter.id = :userId OR r.reportedUser.id = :userId")
+    @Query(value = "DELETE FROM reports WHERE reporter_id = :userId OR reported_user_id = :userId", nativeQuery = true)
     void deleteByReporterIdOrReportedUserId(@Param("userId") Long userId);
 }

@@ -18,10 +18,9 @@ public class UserDTOToUserConverter implements Converter<UserDTO, User> {
         destination.setFirstName(source.getFirstName());
         destination.setLastName(source.getLastName());
         destination.setEmail(source.getEmail());
-        destination.setPassword(source.getPassword()); // Assuming password is set during registration
-        destination.setPremium(source.isPremium());
+        destination.setPassword(source.getPassword());
+        
 
-        // Do NOT map skills here. Skills will be handled separately in UserService.
 
         return destination;
     }

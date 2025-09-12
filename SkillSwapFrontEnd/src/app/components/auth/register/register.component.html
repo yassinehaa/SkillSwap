@@ -1,28 +1,67 @@
 <div class="container-fluid register-container">
   <div class="row justify-content-center align-items-center min-vh-100">
     <div class="col-md-6 col-lg-4">
-      <div class="card shadow-sm">
+      <div class="card shadow-lg register-card">
         <div class="card-body">
-          <h2 class="card-title text-center">Create an account</h2>
+          <h2 class="card-title text-center welcome-header">Create an account</h2>
           <form (ngSubmit)="onSubmit()">
-            <div class="mb-3">
+            <div class="mb-3 input-group-custom">
               <label for="firstName" class="form-label">First Name</label>
-              <input type="text" id="firstName" name="firstName" [(ngModel)]="firstName" placeholder="First Name" required class="form-control">
+              <div class="input-wrapper">
+                <i class="bi bi-person input-icon"></i>
+                <input type="text"
+                       id="firstName"
+                       name="firstName"
+                       [(ngModel)]="firstName"
+                       placeholder="Enter your first name"
+                       required
+                       class="form-control form-control-custom">
+              </div>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 input-group-custom">
               <label for="lastName" class="form-label">Last Name</label>
-              <input type="text" id="lastName" name="lastName" [(ngModel)]="lastName" placeholder="Last Name" required class="form-control">
+              <div class="input-wrapper">
+                <i class="bi bi-person-fill input-icon"></i>
+                <input type="text"
+                       id="lastName"
+                       name="lastName"
+                       [(ngModel)]="lastName"
+                       placeholder="Enter your last name"
+                       required
+                       class="form-control form-control-custom">
+              </div>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 input-group-custom">
               <label for="email" class="form-label">Email</label>
-              <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="Email" required class="form-control">
+              <div class="input-wrapper">
+                <i class="bi bi-envelope input-icon"></i>
+                <input type="email"
+                       id="email"
+                       name="email"
+                       [(ngModel)]="email"
+                       placeholder="Enter your email"
+                       required
+                       class="form-control form-control-custom">
+              </div>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 input-group-custom">
               <label for="password" class="form-label">Password</label>
-              <input type="password" id="password" name="password" [(ngModel)]="password" placeholder="Password" required class="form-control">
+              <div class="input-wrapper">
+                <i class="bi bi-lock input-icon"></i>
+                <input type="password"
+                       id="password"
+                       name="password"
+                       [(ngModel)]="password"
+                       placeholder="Enter your password"
+                       required
+                       class="form-control form-control-custom">
+              </div>
             </div>
             <div class="d-grid">
-              <button type="submit" class="btn btn-primary register-button">Sign up</button>
+              <button type="submit" class="btn btn-success register-button">
+                <i class="bi bi-person-plus me-2"></i>
+                Sign up
+              </button>
             </div>
           </form>
           <div class="text-center mt-3">

@@ -76,13 +76,7 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @PutMapping("/{id}/premium")
-    public ResponseEntity<UserDTO> togglePremium(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.togglePremium(id));
-    }
+    
 
-    @GetMapping("/premium")
-    public ResponseEntity<List<UserDTO>> getPremiumUsers() {
-        return ResponseEntity.ok(userService.getPremiumUsers());
-    }
+    
 }

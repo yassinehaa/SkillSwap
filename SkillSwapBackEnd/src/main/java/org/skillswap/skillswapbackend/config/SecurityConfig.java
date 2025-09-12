@@ -42,10 +42,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/users/current", "/messages/**").authenticated()
+                        .requestMatchers("/api/users/register", "/api/users/login", "/api/skills/search", "/api/skills", "/ws/**", "/api/requests", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml", "/swagger-resources", "/swagger-resources/**").permitAll()
                         .requestMatchers("/api/users/all").hasRole("ADMIN")
-                        .requestMatchers("/api/users/register", "/api/users/login", "/api/skills/search", "/api/skills", "/ws/**", "/api/requests").permitAll()
-                        .requestMatchers("/api/users/**").permitAll() // Permit all requests to /api/users and its sub-paths
+                        .requestMatchers("/api/users/{id}").authenticated() // Specific user updates require authentication
+                        .requestMatchers("/api/users/current", "/messages/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

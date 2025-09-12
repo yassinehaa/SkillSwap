@@ -1,7 +1,6 @@
+package org.skillswap.skillswapbackend.Repositories;
 
-package org.skillswap.skillswapbackend.repository;
-
-import org.skillswap.skillswapbackend.models.Request;
+import org.skillswap.skillswapbackend.Models.Request;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +16,11 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Request r WHERE r.requester.id = :userId OR r.receiver.id = :userId")
+    @Query(value = "DELETE FROM requests WHERE requester_id = :userId OR receiver_id = :userId", nativeQuery = true)
     void deleteByRequesterIdOrReceiverId(@Param("userId") Long userId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM requests WHERE skill_id = :skillId", nativeQuery = true)
+    void deleteBySkillId(@Param("skillId") Long skillId);
 }

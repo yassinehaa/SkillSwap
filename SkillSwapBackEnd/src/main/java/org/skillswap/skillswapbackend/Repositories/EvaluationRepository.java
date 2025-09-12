@@ -12,7 +12,7 @@ import java.util.List;
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
     @Modifying
     @Transactional
-    @Query("DELETE FROM Evaluation e WHERE e.rater.id = :userId OR e.ratedUser.id = :userId")
+    @Query(value = "DELETE FROM evaluations WHERE rater_id = :userId OR rated_user_id = :userId", nativeQuery = true)
     void deleteByRaterIdOrRatedUserId(@Param("userId") Long userId);
 
     List<Evaluation> findByRatedUserId(Long ratedUserId);

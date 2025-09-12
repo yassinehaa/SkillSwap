@@ -13,7 +13,7 @@ public class UserDTO {
     private String lastName;
     private String email;
     private String password;
-    private boolean isPremium;
+    
     private boolean isAdmin;
     private List<SkillDTO> proposedSkills;
     private List<SkillDTO> searchedSkills;

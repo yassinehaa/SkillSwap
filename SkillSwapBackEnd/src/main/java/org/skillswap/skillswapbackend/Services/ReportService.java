@@ -7,6 +7,7 @@ import org.skillswap.skillswapbackend.Repositories.ReportRepository;
 import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.skillswap.skillswapbackend.dto.ReportDTO;
 import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class ReportService {
     private final ReportRepository reportRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     public ReportDTO createReport(ReportDTO reportDTO) {
         User reporter = userRepository.findById(reportDTO.getReporterId())
@@ -31,22 +33,14 @@ public class ReportService {
         report.setTimestamp(LocalDateTime.now());
 
         report = reportRepository.save(report);
-        return toDTO(report);
+        return modelMapper.map(report, ReportDTO.class);
     }
 
     public List<ReportDTO> getAllReports() {
         return reportRepository.findAll().stream()
-                .map(this::toDTO)
+                .map(report -> modelMapper.map(report, ReportDTO.class))
                 .collect(Collectors.toList());
     }
 
-    private ReportDTO toDTO(Report report) {
-        ReportDTO reportDTO = new ReportDTO();
-        reportDTO.setId(report.getId());
-        reportDTO.setReporterId(report.getReporter().getId());
-        reportDTO.setReportedUserId(report.getReportedUser().getId());
-        reportDTO.setReason(report.getReason());
-        reportDTO.setTimestamp(report.getTimestamp());
-        return reportDTO;
-    }
+    
 }

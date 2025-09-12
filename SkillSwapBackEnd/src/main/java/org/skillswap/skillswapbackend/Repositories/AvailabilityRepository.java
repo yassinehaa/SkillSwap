@@ -7,15 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 public interface AvailabilityRepository extends JpaRepository<Availability, Long> {
-    List<Availability> findByUserId(Long userId);
-    List<Availability> findByUserIdAndStartTimeBetween(Long userId, LocalDateTime start, LocalDateTime end);
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Availability a WHERE a.user.id = :userId")
+    @Query(value = "DELETE FROM availabilities WHERE user_id = :userId", nativeQuery = true)
     void deleteByUserId(@Param("userId") Long userId);
 }

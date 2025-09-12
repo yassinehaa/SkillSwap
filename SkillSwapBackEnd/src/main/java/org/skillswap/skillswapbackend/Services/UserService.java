@@ -7,8 +7,9 @@ import org.skillswap.skillswapbackend.Repositories.AvailabilityRepository;
 import org.skillswap.skillswapbackend.Repositories.EvaluationRepository;
 import org.skillswap.skillswapbackend.Repositories.MessageRepository;
 import org.skillswap.skillswapbackend.Repositories.ReportRepository;
-import org.skillswap.skillswapbackend.repository.RequestRepository;
+import org.skillswap.skillswapbackend.Repositories.RequestRepository;
 import org.skillswap.skillswapbackend.Repositories.UserRepository;
+import org.skillswap.skillswapbackend.dto.SkillDTO;
 import org.skillswap.skillswapbackend.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,7 +56,7 @@ public class UserService {
         }
         User user = modelMapper.map(userDTO, User.class);
         user.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Encode password
-        user.setPremium(false); // Default to non-Premium
+        
         user.setAdmin(false); // Default to non-Admin
         user = userRepository.save(user);
         return modelMapper.map(user, UserDTO.class);
@@ -97,7 +98,7 @@ public class UserService {
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
-        user.setPremium(userDTO.isPremium());
+        
         user.setAdmin(userDTO.isAdmin());
 
         // Update skills
@@ -119,32 +120,26 @@ public class UserService {
         reportRepository.deleteByReporterIdOrReportedUserId(id);
         messageRepository.deleteBySenderIdOrReceiverId(id);
         availabilityRepository.deleteByUserId(id);
-        requestRepository.deleteByRequesterIdOrReceiverId(id);
+
+        // Get all skills owned by the user
+        List<Skill> userSkills = skillService.getSkillObjectsByUserId(id);
+        // For each skill, delete any requests that reference them
+        for (Skill skill : userSkills) {
+            requestRepository.deleteBySkillId(skill.getId());
+        }
+        // Then, delete the skills themselves
         skillService.deleteSkillsByUserId(id);
+
+        // Finally, delete requests where the user is requester or receiver
+        requestRepository.deleteByRequesterIdOrReceiverId(id);
 
         userRepository.deleteById(id);
     }
 
-    public UserDTO togglePremium(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setPremium(!user.isPremium());
-        user = userRepository.save(user);
-        return modelMapper.map(user, UserDTO.class);
-    }
+    
 
-    public void updateUserPremiumStatus(String username, boolean isPremium) {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setPremium(isPremium);
-        userRepository.save(user);
-    }
+    
 
-    public List<UserDTO> getPremiumUsers() {
-        return userRepository.findByIsPremiumTrueOrderById()
-                .stream()
-                .map(user -> modelMapper.map(user, UserDTO.class))
-                .collect(Collectors.toList());
-    }
+    
 }
 

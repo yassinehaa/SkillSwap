@@ -1,12 +1,11 @@
-
-package org.skillswap.skillswapbackend.controller;
+package org.skillswap.skillswapbackend.Controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.skillswap.skillswapbackend.dto.RequestDTO;
 import org.skillswap.skillswapbackend.dto.RequestDetailsDTO;
 import org.skillswap.skillswapbackend.mappers.RequestMapper;
-import org.skillswap.skillswapbackend.models.Request;
-import org.skillswap.skillswapbackend.services.RequestService;
+import org.skillswap.skillswapbackend.Models.Request;
+import org.skillswap.skillswapbackend.Services.RequestServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RequestController {
 
-    private final RequestService requestService;
+    private final RequestServiceImpl requestService;
     private final RequestMapper requestMapper;
 
     @PostMapping
@@ -53,8 +52,5 @@ public class RequestController {
         return ResponseEntity.ok(requestService.acceptRequestWithSkillExchange(requestId, skillId));
     }
 
-    @PutMapping("/{requestId}/accept-with-paypal")
-    public ResponseEntity<RequestDetailsDTO> acceptRequestWithPayPal(@PathVariable Long requestId) {
-        return ResponseEntity.ok(requestService.acceptRequestWithPayPal(requestId));
-    }
+    
 }

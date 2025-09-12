@@ -1,5 +1,5 @@
 
-package org.skillswap.skillswapbackend.models;
+package org.skillswap.skillswapbackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;

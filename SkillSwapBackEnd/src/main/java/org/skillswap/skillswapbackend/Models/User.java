@@ -3,7 +3,7 @@ package org.skillswap.skillswapbackend.Models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
-import org.skillswap.skillswapbackend.models.Request;
+import org.skillswap.skillswapbackend.Models.Request;
 
 import java.util.List;
 
@@ -31,8 +31,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private boolean isPremium;
+    
 
     @Column(nullable = false)
     private boolean isAdmin;

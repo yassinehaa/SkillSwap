@@ -10,14 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    @Query("SELECT m FROM Message m WHERE (m.sender.id = :senderId AND m.receiver.id = :receiverId) OR (m.sender.id = :receiverId AND m.receiver.id = :senderId) ORDER BY m.timestamp ASC")
+    @Query(value = "SELECT * FROM messages WHERE (sender_id = :senderId AND receiver_id = :receiverId) OR (sender_id = :receiverId AND receiver_id = :senderId) ORDER BY timestamp ASC", nativeQuery = true)
     List<Message> findConversation(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId);
 
-    @Query("SELECT m FROM Message m WHERE m.sender.id = :userId OR m.receiver.id = :userId ORDER BY m.timestamp DESC")
+    @Query(value = "SELECT * FROM messages WHERE sender_id = :userId OR receiver_id = :userId ORDER BY timestamp DESC", nativeQuery = true)
     List<Message> findConversations(@Param("userId") Long userId);
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Message m WHERE m.sender.id = :userId OR m.receiver.id = :userId")
+    @Query(value = "DELETE FROM messages WHERE sender_id = :userId OR receiver_id = :userId", nativeQuery = true)
     void deleteBySenderIdOrReceiverId(@Param("userId") Long userId);
 }
