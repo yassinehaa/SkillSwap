@@ -3,6 +3,8 @@ package org.skillswap.skillswapbackend.Services;
 
 import lombok.RequiredArgsConstructor;
 
+import org.skillswap.skillswapbackend.Models.Skill;
+import org.skillswap.skillswapbackend.Repositories.SkillRepository;
 import org.skillswap.skillswapbackend.dto.MessageDTO;
 import org.skillswap.skillswapbackend.dto.RequestDetailsDTO;
 import org.skillswap.skillswapbackend.mappers.RequestMapper;
@@ -20,6 +22,8 @@ public class RequestServiceImpl {
     private final RequestRepository requestRepository;
     private final RequestMapper requestMapper;
     private final MessageService messageService;
+    private final SkillExchangeService skillExchangeService;
+    private final SkillRepository skillRepository;
 
     
     public RequestDetailsDTO createRequest(Request request) {
@@ -62,10 +66,14 @@ public class RequestServiceImpl {
         Request request = requestRepository.findById(requestId).orElseThrow(() -> new RuntimeException("Request not found"));
         request.setStatus("ACCEPTED");
         request.setPaymentMethod("SKILL_EXCHANGE");
+
+        Skill skill = skillRepository.findById(skillId).orElseThrow(() -> new RuntimeException("Skill not found"));
+
+        skillExchangeService.createSkillExchange(request, skill);
+
         Request savedRequest = requestRepository.save(request);
         return requestMapper.toDetailsDTO(savedRequest);
     }
 
-    
 }
 

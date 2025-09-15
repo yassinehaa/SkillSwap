@@ -1,30 +1,74 @@
-<div *ngIf="user">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-3">
-          <p><strong>ID:</strong></p>
-          <p><strong>First Name:</strong></p>
-          <p><strong>Last Name:</strong></p>
-          <p><strong>Email:</strong></p>
-          
+<div *ngIf="user" class="container py-4">
+  <div class="card shadow-lg border-0 rounded-4 animate__animated animate__fadeInUp">
+    <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
+      <h3 class="mb-0 fw-bold"><i class="bi bi-person-circle me-2"></i>User Profile</h3>
+    </div>
+    <div class="card-body p-5">
+      <div class="row g-4 mb-4 align-items-center">
+        <div class="col-md-3 text-md-end">
+          <p class="fw-bold text-muted mb-0"><i class="bi bi-person-badge me-2 text-primary"></i>ID:</p>
         </div>
         <div class="col-md-9">
-          <p>{{ user.id }}</p>
-          <p>{{ user.firstName }}</p>
-          <p>{{ user.lastName }}</p>
-          <p>{{ user.email }}</p>
-          
+          <p class="form-control-plaintext mb-0">{{ user.id }}</p>
+        </div>
+
+        <div class="col-md-3 text-md-end">
+          <p class="fw-bold text-muted mb-0"><i class="bi bi-person me-2 text-primary"></i>First Name:</p>
+        </div>
+        <div class="col-md-9">
+          <p class="form-control-plaintext mb-0">{{ user.firstName }}</p>
+        </div>
+
+        <div class="col-md-3 text-md-end">
+          <p class="fw-bold text-muted mb-0"><i class="bi bi-person me-2 text-primary"></i>Last Name:</p>
+        </div>
+        <div class="col-md-9">
+          <p class="form-control-plaintext mb-0">{{ user.lastName }}</p>
+        </div>
+
+        <div class="col-md-3 text-md-end">
+          <p class="fw-bold text-muted mb-0"><i class="bi bi-envelope me-2 text-primary"></i>Email:</p>
+        </div>
+        <div class="col-md-9">
+          <p class="form-control-plaintext mb-0">{{ user.email }}</p>
         </div>
       </div>
-      <hr>
-      <h4>Proposed Skills</h4>
-      <ul>
-        <li *ngFor="let skill of user.proposedSkills">{{ skill.name }}</li>
-      </ul>
-      <hr>
-      <h4>Searched Skills</h4>
-      <ul>
-        <li *ngFor="let skill of user.searchedSkills">{{ skill.name }}</li>
-      </ul>
+
+      <hr class="my-5 border-3 border-secondary animate__animated animate__pulse">
+
+      <h4 class="text-center mb-4 text-primary fw-bold animate__animated animate__fadeInDown">
+        <i class="bi bi-lightbulb me-2"></i>Proposed Skills
+      </h4>
+      <div *ngIf="user.proposedSkills && user.proposedSkills.length > 0; else noProposedSkills" class="row g-3">
+        <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let skill of user.proposedSkills">
+          <div class="skill-item p-3 border border-info rounded-3 text-center bg-light animate__animated animate__zoomIn">
+            <i class="bi bi-check-circle-fill me-2 text-success"></i>{{ skill.name }}
+          </div>
+        </div>
+      </div>
+      <ng-template #noProposedSkills>
+        <div class="alert alert-info text-center animate__animated animate__fadeIn">
+          <i class="bi bi-info-circle me-2"></i>No proposed skills added yet.
+        </div>
+      </ng-template>
+
+      <hr class="my-5 border-3 border-secondary animate__animated animate__pulse">
+
+      <h4 class="text-center mb-4 text-primary fw-bold animate__animated animate__fadeInDown">
+        <i class="bi bi-search me-2"></i>Searched Skills
+      </h4>
+      <div *ngIf="user.searchedSkills && user.searchedSkills.length > 0; else noSearchedSkills" class="row g-3">
+        <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let skill of user.searchedSkills">
+          <div class="skill-item p-3 border border-warning rounded-3 text-center bg-light animate__animated animate__zoomIn">
+            <i class="bi bi-search me-2 text-warning"></i>{{ skill.name }}
+          </div>
+        </div>
+      </div>
+      <ng-template #noSearchedSkills>
+        <div class="alert alert-info text-center animate__animated animate__fadeIn">
+          <i class="bi bi-info-circle me-2"></i>No searched skills added yet.
+        </div>
+      </ng-template>
     </div>
   </div>
+</div>

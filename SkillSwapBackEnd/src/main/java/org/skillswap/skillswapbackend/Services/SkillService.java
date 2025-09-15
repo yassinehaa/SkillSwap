@@ -1,8 +1,10 @@
 package org.skillswap.skillswapbackend.Services;
 
 import org.modelmapper.ModelMapper;
+import org.skillswap.skillswapbackend.Models.Request;
 import org.skillswap.skillswapbackend.Models.Skill;
 import org.skillswap.skillswapbackend.Models.User;
+import org.skillswap.skillswapbackend.Repositories.SkillExchangeRepository;
 import org.skillswap.skillswapbackend.Repositories.SkillRepository;
 import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.skillswap.skillswapbackend.Repositories.RequestRepository;
@@ -31,20 +33,21 @@ public class SkillService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public SkillDTO addSkill(Long userId, SkillDTO skillDTO) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Skill skill = modelMapper.map(skillDTO, Skill.class);
-        skill.setUser(user);
-        skill = skillRepository.save(skill);
-        return modelMapper.map(skill, SkillDTO.class);
-    }
+    @Autowired
+    private SkillExchangeRepository skillExchangeRepository;
+
+    
 
     @Transactional
     public void deleteSkillsByUserId(Long userId) {
         List<Skill> skills = skillRepository.findByUserId(userId);
         for (Skill skill : skills) {
+            List<Request> requests = requestRepository.findBySkillId(skill.getId());
+            for (Request request : requests) {
+                skillExchangeRepository.deleteByRequestId(request.getId());
+            }
             requestRepository.deleteBySkillId(skill.getId());
+            skillExchangeRepository.deleteByExchangeSkillId(skill.getId());
         }
         skillRepository.deleteByUserId(userId);
     }
@@ -53,7 +56,7 @@ public class SkillService {
         return skillRepository.findByUserIdAndType(userId, type)
                 .stream()
                 .map(skill -> modelMapper.map(skill, SkillDTO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<SkillDTO> getMatchingSkills(Long userId) {

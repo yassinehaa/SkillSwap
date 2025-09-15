@@ -11,6 +11,7 @@ import org.skillswap.skillswapbackend.Repositories.RequestRepository;
 import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.skillswap.skillswapbackend.dto.SkillDTO;
 import org.skillswap.skillswapbackend.dto.UserDTO;
+import org.skillswap.skillswapbackend.dto.UserDTO2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -115,25 +116,23 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        // Delete related records first
         evaluationRepository.deleteByRaterIdOrRatedUserId(id);
         reportRepository.deleteByReporterIdOrReportedUserId(id);
         messageRepository.deleteBySenderIdOrReceiverId(id);
         availabilityRepository.deleteByUserId(id);
 
-        // Get all skills owned by the user
         List<Skill> userSkills = skillService.getSkillObjectsByUserId(id);
-        // For each skill, delete any requests that reference them
         for (Skill skill : userSkills) {
             requestRepository.deleteBySkillId(skill.getId());
         }
-        // Then, delete the skills themselves
         skillService.deleteSkillsByUserId(id);
-
-        // Finally, delete requests where the user is requester or receiver
         requestRepository.deleteByRequesterIdOrReceiverId(id);
 
         userRepository.deleteById(id);
+    }
+    public List<UserDTO2> countSkills(){
+     List<Object[]> results = userRepository.countSkills();
+     return results.stream().map(result -> new UserDTO2((String) result[0], (Long) result[1])).collect(Collectors.toList());
     }
 
     

@@ -1,13 +1,13 @@
 
 <div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
+  <div class="row">
+    <div class="col-md-4">
       <div class="card">
         <div class="card-header bg-primary text-white">
-          <h4 class="mb-0">Messages</h4>
+          <h4 class="mb-0">Conversations</h4>
         </div>
         <div class="list-group list-group-flush">
-          <a *ngFor="let conversation of conversations" [routerLink]="['/messages', conversation.withUser.id]" class="list-group-item list-group-item-action">
+          <a *ngFor="let conversation of conversations" href="#" (click)="selectConversation(conversation); $event.preventDefault()" class="list-group-item list-group-item-action">
             <div class="d-flex w-100 justify-content-between">
               <h5 class="mb-1">{{ conversation.withUser.firstName }} {{ conversation.withUser.lastName }}</h5>
               <small>{{ conversation.lastMessage.timestamp | date:'short' }}</small>
@@ -16,6 +16,9 @@
           </a>
         </div>
       </div>
+    </div>
+    <div class="col-md-8">
+      <app-message-conversation *ngIf="selectedConversation" [receiverId]="selectedConversation.withUser.id"></app-message-conversation>
     </div>
   </div>
 </div>

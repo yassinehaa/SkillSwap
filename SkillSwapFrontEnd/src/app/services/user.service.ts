@@ -4,6 +4,10 @@ import { User } from '../models/user.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
+interface countSkill {
+name : string;
+skillcount: number;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -54,5 +58,8 @@ export class UserService {
     return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() }).pipe(
       catchError(this.handleError)
     );
+  }
+  skillCount(): Observable<countSkill[]>{
+    return this.http.get<countSkill[]>(`${this.apiUrl}/list` , { headers: this.getHeaders() })
   }
 }

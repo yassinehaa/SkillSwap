@@ -14,6 +14,8 @@ import java.util.List;
 public interface RequestRepository extends JpaRepository<Request, Long> {
     List<Request> findByReceiverId(Long receiverId);
 
+    List<Request> findBySkillId(Long skillId);
+
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM requests WHERE requester_id = :userId OR receiver_id = :userId", nativeQuery = true)
@@ -23,4 +25,5 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Transactional
     @Query(value = "DELETE FROM requests WHERE skill_id = :skillId", nativeQuery = true)
     void deleteBySkillId(@Param("skillId") Long skillId);
+
 }

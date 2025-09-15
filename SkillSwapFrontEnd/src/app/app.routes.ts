@@ -21,7 +21,7 @@ export const routes: Routes = [
   {path : 'search' , component : SearchResultsComponent},
   {path : 'requests' , component : RequestListComponent},
   {path : 'messages' , component : MessagesComponent},
-  {path : 'messages/:userId' , loadComponent: () => import('./components/message/message-conversation/message-conversation.component').then(m => m.MessageConversationComponent)},
+  
   {path : 'request-skill' , loadComponent: () => import('./components/requests/request-skill/request-skill.component').then(m => m.RequestSkillComponent)},
   {path : 'skill-exchange/:id' , component : SkillExchangeComponent},
   

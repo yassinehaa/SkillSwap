@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { ReportService } from '../../../services/report.service';
 import { Report } from '../../../models/report.model';
 import { CommonModule, NgForOf, NgIf} from "@angular/common";
+import {AComponent} from '../../../a/a.component';
+import {BComponent} from '../../../b/b.component';
 
 @Component({
   selector: 'app-report-list',
@@ -10,7 +12,9 @@ import { CommonModule, NgForOf, NgIf} from "@angular/common";
   standalone: true,
   imports: [
     NgForOf,
-    CommonModule
+    CommonModule,
+    AComponent,
+    BComponent
   ],
   styleUrls: ['./report-list.component.css']
 })

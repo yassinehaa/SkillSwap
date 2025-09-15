@@ -47,7 +47,5 @@ export class RequestService {
     return this.http.put<Request>(`${this.baseUrl}/${request.id}/accept-with-exchange`, { skillId: skill.id });
   }
 
-  acceptRequestWithPayPal(request: Request): Observable<Request> {
-    return this.http.put<Request>(`${this.baseUrl}/${request.id}/accept-with-paypal`, {});
-  }
+  
 }

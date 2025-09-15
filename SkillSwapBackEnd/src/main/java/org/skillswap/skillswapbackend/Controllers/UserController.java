@@ -1,5 +1,6 @@
 package org.skillswap.skillswapbackend.Controllers;
 
+import org.skillswap.skillswapbackend.dto.UserDTO2;
 import org.skillswap.skillswapbackend.jwt.JwtUtil;
 import org.skillswap.skillswapbackend.Services.UserDetailsServiceImpl;
 import org.skillswap.skillswapbackend.dto.AuthRequest;
@@ -76,7 +77,9 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    
-
+    @GetMapping("/list")
+    public List<UserDTO2> countSkills(){
+        return userService.countSkills();
+    }
     
 }

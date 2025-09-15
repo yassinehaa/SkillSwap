@@ -17,10 +17,7 @@ public class SkillController {
     @Autowired
     private SkillService skillService;
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<SkillDTO> addSkill(@PathVariable Long userId, @RequestBody SkillDTO skillDTO) {
-        return ResponseEntity.ok(skillService.addSkill(userId, skillDTO));
-    }
+    
 
     @GetMapping("/match/{userId}")
     public ResponseEntity<List<SkillDTO>> getMatchingSkills(@PathVariable Long userId) {

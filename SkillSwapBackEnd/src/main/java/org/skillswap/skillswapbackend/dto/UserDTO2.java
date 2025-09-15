@@ -1,4 +1,3 @@
-
 package org.skillswap.skillswapbackend.dto;
 
 import lombok.AllArgsConstructor;
@@ -8,10 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestDTO {
-    private Long requesterId;
-    private Long receiverId;
-    private Long skillId;
-    private String status;
-    private String paymentMethod;
+public class UserDTO2 {
+    private String name;
+    private Long skillCount;
 }

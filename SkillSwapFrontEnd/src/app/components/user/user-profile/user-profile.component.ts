@@ -172,7 +172,7 @@ export class UserProfileComponent implements OnInit {
 
   startConversation(userId: number | undefined): void {
     if (userId) {
-      this.router.navigate(['/messages', userId]);
+      this.router.navigate(['/messages'], { queryParams: { userId: userId } });
     }
   }
 

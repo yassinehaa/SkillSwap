@@ -4,7 +4,7 @@
     <h2>Exchange Skill for {{ request.skill.name }}</h2>
     <p>Select a skill from {{ request.requester.firstName }} {{ request.requester.lastName }} to exchange:</p>
     <div class="list-group">
-      <a *ngFor="let skill of requesterSkills" href="#" class="list-group-item list-group-item-action" [class.active]="selectedSkill === skill" (click)="selectSkill(skill)">
+      <a *ngFor="let skill of requesterSkills" href="#" class="list-group-item list-group-item-action" [class.active]="selectedSkill === skill" (click)="selectSkill(skill); $event.preventDefault()">
         {{ skill.name }}
       </a>
     </div>

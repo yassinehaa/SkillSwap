@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from '../../../services/message.service';
 import { AuthService } from '../../../services/auth.service';
@@ -15,15 +15,14 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule, FormsModule, NgForOf]
 })
-export class MessageConversationComponent implements OnInit, OnDestroy {
-  receiverId: number | null = null;
+export class MessageConversationComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() receiverId: number | null = null;
   currentUser: User | null = null;
   messages: Message[] = [];
   newMessageContent: string = '';
   private messageSubscription: Subscription | undefined;
 
   constructor(
-    private route: ActivatedRoute,
     private messageService: MessageService,
     private authService: AuthService
   ) { }
@@ -31,21 +30,14 @@ export class MessageConversationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authService.getCurrentUser().subscribe(user => {
       this.currentUser = user;
-      this.route.paramMap.subscribe(params => {
-        const id = params.get('userId');
-        if (id) {
-          this.receiverId = +id;
-          this.loadConversation();
-          this.messageService.connect(this.currentUser?.id);
-          this.messageSubscription = this.messageService.getMessages().subscribe(message => {
-            if ((message.senderId === this.currentUser?.id && message.receiverId === this.receiverId) ||
-                (message.senderId === this.receiverId && message.receiverId === this.currentUser?.id)) {
-              this.messages.push(message);
-            }
-          });
-        }
-      });
+      this.messageService.connect(this.currentUser?.id);
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['receiverId'] && changes['receiverId'].currentValue) {
+      this.loadConversation();
+    }
   }
 
   ngOnDestroy(): void {
@@ -58,6 +50,16 @@ export class MessageConversationComponent implements OnInit, OnDestroy {
     if (this.currentUser && this.receiverId) {
       this.messageService.getConversation(this.currentUser.id!, this.receiverId).subscribe(messages => {
         this.messages = messages;
+        if (this.messageSubscription) {
+          this.messageSubscription.unsubscribe();
+        }
+        this.messageSubscription = this.messageService.getMessages().subscribe(message => {
+          console.log('Received message:', message);
+          if ((message.senderId === this.currentUser?.id && message.receiverId === this.receiverId) ||
+              (message.senderId === this.receiverId && message.receiverId === this.currentUser?.id)) {
+            this.messages = [...this.messages, message];
+          }
+        });
       });
     }
   }
@@ -67,17 +69,12 @@ export class MessageConversationComponent implements OnInit, OnDestroy {
       const message: Message = {
         senderId: this.currentUser.id!,
         receiverId: this.receiverId,
-        content: this.newMessageContent
+        content: this.newMessageContent,
+        timestamp: new Date()
       };
-      this.messageService.sendHttpMessage(message).subscribe(
-        (sentMessage) => {
-          this.messages.push(sentMessage);
-          this.newMessageContent = '';
-        },
-        (error) => {
-          console.error('Error sending message:', error);
-        }
-      );
+      this.messageService.sendMessage(message);
+      this.messages.push(message);
+      this.newMessageContent = '';
     }
   }
 }

@@ -62,14 +62,5 @@ export class RequestListComponent implements OnInit {
     this.router.navigate(['/skill-exchange', request.id]);
   }
 
-  acceptWithPayPal(request: Request): void {
-    const message = {
-      senderId: this.currentUser?.id,
-      receiverId: request.requester.id,
-      content: `Your request to learn ${request.skill.name} has been accepted. Please proceed with the payment.`
-    };
-    this.messageService.sendHttpMessage(message).subscribe(() => {
-      this.router.navigate(['/paypal-payment', request.id]);
-    });
-  }
+  
 }
