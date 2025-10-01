@@ -33,4 +33,19 @@ public class SkillController {
         return ResponseEntity.ok(skillService.getUserSkills(userId));
     }
 
+    @PutMapping("/approve/{skillId}")
+    public ResponseEntity<SkillDTO> approveSkill(@PathVariable Long skillId) {
+        return ResponseEntity.ok(skillService.approveSkill(skillId));
+    }
+
+    @PutMapping("/reject/{skillId}")
+    public ResponseEntity<SkillDTO> rejectSkill(@PathVariable Long skillId) {
+        return ResponseEntity.ok(skillService.rejectSkill(skillId));
+    }
+
+    @GetMapping("/pending")
+    public ResponseEntity<List<SkillDTO>> getPendingSkills() {
+        return ResponseEntity.ok(skillService.getPendingSkills());
+    }
+
 }

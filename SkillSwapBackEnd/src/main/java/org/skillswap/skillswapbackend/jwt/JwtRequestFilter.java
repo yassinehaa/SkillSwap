@@ -30,6 +30,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+        String requestURI = request.getRequestURI();
+        if (requestURI.startsWith("/api/users/register") || requestURI.startsWith("/api/users/login")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         final String authorizationHeader = request.getHeader("Authorization");
         logger.info("Request URI: {}", request.getRequestURI());
         logger.info("Authorization Header: {}", authorizationHeader);

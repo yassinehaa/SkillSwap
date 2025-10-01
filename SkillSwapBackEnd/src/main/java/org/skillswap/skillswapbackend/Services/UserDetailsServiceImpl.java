@@ -1,7 +1,7 @@
 package org.skillswap.skillswapbackend.Services;
 
-import org.skillswap.skillswapbackend.Models.User;
-import org.skillswap.skillswapbackend.Repositories.UserRepository;
+import org.skillswap.skillswapbackend.Models.Personne;
+import org.skillswap.skillswapbackend.Repositories.PersonneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,18 +16,16 @@ import java.util.Collection;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private PersonneRepository personneRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
+        Personne personne = personneRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        if (user.isAdmin()) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        }
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + personne.getRole().name()));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(personne.getEmail(), personne.getPassword(), authorities);
     }
 }

@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user.model';
-import {NgForOf, NgIf} from "@angular/common";
+import {NgForOf} from "@angular/common";
 import {RouterLink} from '@angular/router';
 
 @Component({
@@ -10,7 +10,7 @@ import {RouterLink} from '@angular/router';
   templateUrl: './admin-dashboard.component.html',
   imports: [
     NgForOf,
-    RouterLink
+    RouterLink,
   ],
   styleUrls: ['./admin-dashboard.component.css']
 })
@@ -25,7 +25,7 @@ export class AdminDashboardComponent implements OnInit {
 
   getAllUsers(): void {
     this.userService.getAllUsers().subscribe(users => {
-      this.users = users;
+      this.users = users.filter(user=>user.role !== "ADMIN");
     });
   }
 

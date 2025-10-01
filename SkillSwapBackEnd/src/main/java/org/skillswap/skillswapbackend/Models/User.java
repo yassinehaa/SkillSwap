@@ -3,7 +3,6 @@ package org.skillswap.skillswapbackend.Models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
-import org.skillswap.skillswapbackend.Models.Request;
 
 import java.util.List;
 
@@ -14,27 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
-
-    
-
-    @Column(nullable = false)
-    private boolean isAdmin;
+public class User extends Personne {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("user")
@@ -43,18 +22,6 @@ public class User {
     @OneToMany(mappedBy = "ratedUser", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("ratedUser")
     private List<Evaluation> evaluations;
-
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("sender")
-    private List<Message> sentMessages;
-
-    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("receiver")
-    private List<Message> receivedMessages;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("user")
-    private List<Availability> availabilities;
 
     @OneToMany(mappedBy = "requester", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("requester")

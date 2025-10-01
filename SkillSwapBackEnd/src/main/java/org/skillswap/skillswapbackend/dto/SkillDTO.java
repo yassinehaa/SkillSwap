@@ -13,6 +13,10 @@ import org.skillswap.skillswapbackend.Models.Skill;
 public class SkillDTO {
     private Long id;
     private String name;
+    private String description;
+    private String level;
+    private String category;
     private Skill.SkillType type;
+    private Skill.SkillStatus status;
     private Long userId;
 }

@@ -5,16 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageDTO {
+public class AdminDTO {
     private Long id;
-    private Long senderId;
-    private Long receiverId;
-    private String content;
-    private Date timestamp;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
 }

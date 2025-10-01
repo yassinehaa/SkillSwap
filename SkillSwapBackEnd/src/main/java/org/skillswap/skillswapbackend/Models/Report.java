@@ -19,11 +19,11 @@ public class Report {
 
     @ManyToOne
     @JoinColumn(name = "reporter_id")
-    private User reporter;
+    private Personne reporter;
 
     @ManyToOne
     @JoinColumn(name = "reported_user_id")
-    private User reportedUser;
+    private Personne reportedUser;
 
     private String reason;
 

@@ -1,34 +1,45 @@
 package org.skillswap.skillswapbackend.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "skills")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
+    private String description;
+    private String level;
+    private String category;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private SkillType type;
+    private SkillStatus status; // PENDING, APPROVED, REJECTED
+
+    @Enumerated(EnumType.STRING)
+    private SkillType type; // OFFERED or SEARCHED
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties("skills")
-    private User user;
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private Personne user;
 
     public enum SkillType {
-        OFFERED, SEARCHED
+        OFFERED,
+        SEARCHED
+    }
+
+    public enum SkillStatus {
+        PENDING,
+        APPROVED,
+        REJECTED
     }
 }

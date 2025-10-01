@@ -9,17 +9,17 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api/users';
-
   constructor(private http: HttpClient) { }
 
   register(user: User): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/register`, user);
+    return this.http.post<User>(`${this.apiUrl}/register`, user)
   }
 
   login(credentials: any): Observable<string> {
     return this.http.post(`${this.apiUrl}/login`, credentials, { responseType: 'text' }).pipe(
       tap(token => this.saveToken(token))
     );
+
   }
 
   saveToken(token: string): void {

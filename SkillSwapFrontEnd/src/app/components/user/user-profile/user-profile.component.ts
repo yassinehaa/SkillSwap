@@ -6,7 +6,7 @@ import {UserService} from '../../../services/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Skill} from '../../../models/skill.model';
 
-import { MessageService } from '../../../services/message.service';
+
 import { ReportService } from '../../../services/report.service';
 import { EvaluationService } from '../../../services/evaluation.service';
 
@@ -27,8 +27,14 @@ export class UserProfileComponent implements OnInit {
   currentUser: User | null = null;
   isEditing = false;
   profileForm: FormGroup;
-  newProposedSkill = '';
-  newSearchedSkill = '';
+  newProposedSkillName = '';
+  newProposedSkillDescription = '';
+  newProposedSkillLevel = '';
+  newProposedSkillCategory = '';
+  newSearchedSkillName = '';
+  newSearchedSkillDescription = '';
+  newSearchedSkillLevel = '';
+  newSearchedSkillCategory = '';
   errorMessage: string | null = null;
   receivedRequests: Request[] = [];
   reportReason: string = '';
@@ -37,9 +43,10 @@ export class UserProfileComponent implements OnInit {
 
   constructor(private userService: UserService, private fb: FormBuilder, private route: ActivatedRoute, private requestService: RequestService, private authService: AuthService, private router: Router, private reportService: ReportService, private evaluationService: EvaluationService) {
     this.profileForm = this.fb.group({
-      
+
       proposedSkills: this.fb.array([]),
-      searchedSkills: this.fb.array([])
+      searchedSkills: this.fb.array([]),
+
     });
   }
 
@@ -48,8 +55,8 @@ export class UserProfileComponent implements OnInit {
       this.user = data['user'];
       if (this.user) {
         this.profileForm.patchValue({
-          
-          isAdmin: this.user.isAdmin
+
+
         });
         if (this.user.proposedSkills) {
           this.setSkills(this.user.proposedSkills, 'proposedSkills');
@@ -83,19 +90,43 @@ export class UserProfileComponent implements OnInit {
   private setSkills(skills: Skill[], formArrayName: string): void {
     const formArray = this.profileForm.get(formArrayName) as FormArray;
     formArray.clear();
-    skills.forEach(skill => formArray.push(this.fb.control(skill.name, Validators.required)));
+    skills.forEach(skill => formArray.push(this.fb.group({
+      name: [skill.name, Validators.required],
+      description: [skill.description, Validators.required],
+      level: [skill.level, Validators.required],
+      category: [skill.category, Validators.required],
+      status: [skill.status]
+    })));
   }
 
   // Add new skill
-  addSkill(type: 'proposed' | 'searched', skill: string): void {
-    if (skill.trim()) {
-      const formArray = type === 'proposed' ? this.proposedSkills : this.searchedSkills;
-      formArray.push(this.fb.control(skill.trim(), Validators.required));
-      if (type === 'proposed') {
-        this.newProposedSkill = '';
-      } else {
-        this.newSearchedSkill = '';
-      }
+  addSkill(type: 'proposed' | 'searched', description: string, level: string, category: string): void {
+    if (type === 'proposed' && this.newProposedSkillName.trim()) {
+      const formArray = this.proposedSkills;
+      formArray.push(this.fb.group({
+        name: [this.newProposedSkillName.trim(), Validators.required],
+        description: [description.trim(), Validators.required],
+        level: [level.trim(), Validators.required],
+        category: [category.trim(), Validators.required],
+        status: ['PENDING']
+      }));
+      this.newProposedSkillName = '';
+      this.newProposedSkillDescription = '';
+      this.newProposedSkillLevel = '';
+      this.newProposedSkillCategory = '';
+    } else if (type === 'searched' && this.newSearchedSkillName.trim()) {
+      const formArray = this.searchedSkills;
+      formArray.push(this.fb.group({
+        name: [this.newSearchedSkillName.trim(), Validators.required],
+        description: [description.trim(), Validators.required],
+        level: [level.trim(), Validators.required],
+        category: [category.trim(), Validators.required],
+        status: ['PENDING']
+      }));
+      this.newSearchedSkillName = '';
+      this.newSearchedSkillDescription = '';
+      this.newSearchedSkillLevel = '';
+      this.newSearchedSkillCategory = '';
     }
   }
 
@@ -112,11 +143,12 @@ export class UserProfileComponent implements OnInit {
         id: this.user.id,
         firstName: this.user.firstName,
         lastName: this.user.lastName,
-        email: this.user.email, // Preserve existing email
-        
-        isAdmin: this.user.isAdmin, // Include isAdmin property
-        proposedSkills: this.proposedSkills.value.map((name: string) => ({ name, type: 'OFFERED' })),
-        searchedSkills: this.searchedSkills.value.map((name: string) => ({ name, type: 'SEARCHED' }))
+        email: this.user.email,
+        password: this.user.password,
+
+
+        proposedSkills: this.proposedSkills.value.map((skill: Skill) => ({ ...skill, type: 'OFFERED' })),
+        searchedSkills: this.searchedSkills.value.map((skill: Skill) => ({ ...skill, type: 'SEARCHED' }))
       };
       this.userService.updateUser(payload).subscribe({
         next: (updatedUser) => {
@@ -170,11 +202,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  startConversation(userId: number | undefined): void {
-    if (userId) {
-      this.router.navigate(['/messages'], { queryParams: { userId: userId } });
-    }
-  }
+
 
     submitReport(): void {
     if (this.user && this.currentUser && this.reportReason.trim() && this.currentUser.id && this.user.id) {
@@ -223,6 +251,7 @@ export class UserProfileComponent implements OnInit {
       });
     }
   }
+
 }
 
 

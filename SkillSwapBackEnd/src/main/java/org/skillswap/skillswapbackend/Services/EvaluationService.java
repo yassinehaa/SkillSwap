@@ -1,10 +1,10 @@
 package org.skillswap.skillswapbackend.Services;
 
+import org.skillswap.skillswapbackend.Models.Personne;
 import lombok.RequiredArgsConstructor;
 import org.skillswap.skillswapbackend.Models.Evaluation;
-import org.skillswap.skillswapbackend.Models.User;
 import org.skillswap.skillswapbackend.Repositories.EvaluationRepository;
-import org.skillswap.skillswapbackend.Repositories.UserRepository;
+import org.skillswap.skillswapbackend.Repositories.PersonneRepository;
 import org.skillswap.skillswapbackend.dto.EvaluationDTO;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EvaluationService {
     private final EvaluationRepository evaluationRepository;
-    private final UserRepository userRepository;
+    private final PersonneRepository userRepository;
     private final ModelMapper modelMapper;
 
     public EvaluationDTO createEvaluation(EvaluationDTO evaluationDTO) {
-        User rater = userRepository.findById(evaluationDTO.getRaterId())
+        Personne rater = userRepository.findById(evaluationDTO.getRaterId())
                 .orElseThrow(() -> new RuntimeException("Rater not found"));
-        User ratedUser = userRepository.findById(evaluationDTO.getRatedUserId())
+        Personne ratedUser = userRepository.findById(evaluationDTO.getRatedUserId())
                 .orElseThrow(() -> new RuntimeException("Rated user not found"));
 
         Evaluation evaluation = new Evaluation();

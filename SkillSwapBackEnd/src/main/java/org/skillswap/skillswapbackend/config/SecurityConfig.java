@@ -41,17 +41,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/users/register", "/api/users/login", "/api/skills/search", "/api/skills", "/ws/**", "/api/requests", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml", "/swagger-resources", "/swagger-resources/**").permitAll()
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/users/register", "/api/users/login", "/api/admin/register", "/api/skills/search", "/api/skills", "/ws/**", "/api/requests", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml", "/swagger-resources", "/swagger-resources/**").permitAll()
                         .requestMatchers("/api/users/all").hasRole("ADMIN")
                         .requestMatchers("/api/users/{id}").authenticated() // Specific user updates require authentication
-                        .requestMatchers("/api/users/current", "/messages/**").authenticated()
+                        .requestMatchers("/api/users/current").authenticated()
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        http.addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

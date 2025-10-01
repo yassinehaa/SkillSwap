@@ -23,9 +23,6 @@ export class UserProfileEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
       proposedSkills: this.fb.array([]),
       searchedSkills: this.fb.array([])
     });
@@ -35,7 +32,8 @@ export class UserProfileEditComponent implements OnInit {
       this.profileForm.patchValue({
         firstName: this.user.firstName,
         lastName: this.user.lastName,
-        email: this.user.email
+        email: this.user.email,
+        password: this.user.password
       });
       this.setSkills();
       this.isLoading = false;
@@ -43,8 +41,20 @@ export class UserProfileEditComponent implements OnInit {
   }
 
   private setSkills(): void {
-    this.user.proposedSkills?.forEach(skill => this.proposedSkills.push(new FormControl(skill.name)));
-    this.user.searchedSkills?.forEach(skill => this.searchedSkills.push(new FormControl(skill.name)));
+    this.user.proposedSkills?.forEach(skill => this.proposedSkills.push(this.fb.group({
+      name: [skill.name, Validators.required],
+      description: [skill.description, Validators.required],
+      level: [skill.level, Validators.required],
+      category: [skill.category, Validators.required],
+      status: [skill.status]
+    })));
+    this.user.searchedSkills?.forEach(skill => this.searchedSkills.push(this.fb.group({
+      name: [skill.name, Validators.required],
+      description: [skill.description, Validators.required],
+      level: [skill.level, Validators.required],
+      category: [skill.category, Validators.required],
+      status: [skill.status]
+    })));
   }
 
   get proposedSkills(): FormArray {
@@ -56,9 +66,13 @@ export class UserProfileEditComponent implements OnInit {
   }
 
   addProposedSkill(): void {
-    setTimeout(() => {
-      this.proposedSkills.push(new FormControl(''));
-    });
+    this.proposedSkills.push(this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      level: ['', Validators.required],
+      category: ['', Validators.required],
+      status: ['PENDING']
+    }));
   }
 
   removeProposedSkill(index: number): void {
@@ -66,9 +80,13 @@ export class UserProfileEditComponent implements OnInit {
   }
 
   addSearchedSkill(): void {
-    setTimeout(() => {
-      this.searchedSkills.push(new FormControl(''));
-    });
+    this.searchedSkills.push(this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      level: ['', Validators.required],
+      category: ['', Validators.required],
+      status: ['PENDING']
+    }));
   }
 
   removeSearchedSkill(index: number): void {
@@ -81,8 +99,9 @@ export class UserProfileEditComponent implements OnInit {
         ...this.user,
         ...this.profileForm.value,
         id: this.user.id, // Ensure the user ID is included
-        proposedSkills: this.proposedSkills.controls.map(control => ({ name: control.value, type: SkillType.OFFERED })),
-        searchedSkills: this.searchedSkills.controls.map(control => ({ name: control.value, type: SkillType.SEARCHED }))
+        proposedSkills: this.proposedSkills.value.map((skill: Skill) => ({ ...skill, type: SkillType.OFFERED })),
+        searchedSkills: this.searchedSkills.value.map((skill: Skill) => ({ ...skill, type: SkillType.SEARCHED })),
+        ...(this.profileForm.value.password && { password: this.profileForm.value.password })
       };
       this.userService.updateUser(updatedUser).subscribe(() => {
         this.router.navigate(['/profile']);

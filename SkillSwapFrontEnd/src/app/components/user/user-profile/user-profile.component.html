@@ -7,39 +7,192 @@
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
       <h2 class="mb-4">Edit Skills</h2>
 
-      
+
 
       <!-- Proposed Skills -->
       <div class="mb-3">
         <label class="form-label">Proposed Skills</label>
-        <div class="input-group mb-2">
-          <input type="text" class="form-control" placeholder="Add a proposed skill"
-                 [(ngModel)]="newProposedSkill" [ngModelOptions]="{standalone: true}">
-          <button type="button" class="btn btn-primary" (click)="addSkill('proposed', newProposedSkill)">Add</button>
+        <div formArrayName="proposedSkills">
+          <div *ngFor="let skillGroup of proposedSkills.controls; let i = index" [formGroupName]="i" class="mb-3 p-3 border rounded">
+            <div class="mb-2">
+              <label for="proposedSkillName{{i}}" class="form-label">Skill Name</label>
+              <select type="text" id="proposedSkillName{{i}}" formControlName="name" class="form-control">
+                <option value="">-- Select a Skill --</option>
+                <option value="Web Development">Web Development</option>
+                <option value="Mobile App Development">Mobile App Development</option>
+                <option value="Graphic Design">Graphic Design</option>
+                <option value="UI/UX Design">UI/UX Design</option>
+                <option value="Digital Marketing">Digital Marketing</option>
+                <option value="Content Writing">Content Writing</option>
+                <option value="Public Speaking">Public Speaking</option>
+                <option value="Photography">Photography</option>
+                <option value="Video Editing">Video Editing</option>
+                <option value="Data Analysis">Data Analysis</option>
+                <option value="Machine Learning">Machine Learning</option>
+                <option value="Cybersecurity">Cybersecurity</option>
+                <option value="Cloud Computing">Cloud Computing</option>
+                <option value="Project Management">Project Management</option>
+                <option value="Time Management">Time Management</option>
+                <option value="Cooking">Cooking</option>
+                <option value="Baking">Baking</option>
+                <option value="Music Production">Music Production</option>
+                <option value="Playing Guitar">Playing Guitar</option>
+                <option value="Learning Languages">Learning Languages</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Creative Writing">Creative Writing</option>
+                <option value="Problem Solving">Problem Solving</option>
+                <option value="Critical Thinking">Critical Thinking</option>
+                <option value="Leadership">Leadership</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label for="proposedSkillDescription{{i}}" class="form-label">Description</label>
+              <input type="text" id="proposedSkillDescription{{i}}" formControlName="description" class="form-control">
+            </div>
+            <div class="mb-2">
+              <label for="proposedSkillLevel{{i}}" class="form-label">Level</label>
+              <select id="proposedSkillLevel{{i}}" formControlName="level" class="form-control">
+                <option value="">-- Select a Level --</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label for="proposedSkillCategory{{i}}" class="form-label">Category</label>
+              <select id="proposedSkillCategory{{i}}" formControlName="category" class="form-control">
+                <option value="">-- Select a Category --</option>
+                <option value="Technology">Technology</option>
+                <option value="Creative">Creative</option>
+                <option value="Lifestyle">Lifestyle</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-outline-danger" (click)="removeSkill('proposed', i)">Remove</button>
+          </div>
         </div>
-        <div class="d-flex flex-wrap gap-2">
-          <span *ngFor="let skill of proposedSkills.controls; let i = index" class="badge bg-primary me-1">
-            {{ skill.value }}
-            <button type="button" class="btn-close btn-close-white ms-2" (click)="removeSkill('proposed', i)"
-                    aria-label="Remove"></button>
-          </span>
+        <div class="input-group mb-2">
+          <select class="form-control" [(ngModel)]="newProposedSkillName" [ngModelOptions]="{standalone: true}">
+            <option value="">-- Select a Skill --</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Mobile App Development">Mobile App Development</option>
+            <option value="Graphic Design">Graphic Design</option>
+            <option value="UI/UX Design">UI/UX Design</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Content Writing">Content Writing</option>
+            <option value="Public Speaking">Public Speaking</option>
+            <option value="Photography">Photography</option>
+            <option value="Video Editing">Video Editing</option>
+            <option value="Data Analysis">Data Analysis</option>
+            <option value="Machine Learning">Machine Learning</option>
+            <option value="Cybersecurity">Cybersecurity</option>
+            <option value="Cloud Computing">Cloud Computing</option>
+            <option value="Project Management">Project Management</option>
+            <option value="Time Management">Time Management</option>
+            <option value="Cooking">Cooking</option>
+            <option value="Baking">Baking</option>
+            <option value="Music Production">Music Production</option>
+            <option value="Playing Guitar">Playing Guitar</option>
+            <option value="Learning Languages">Learning Languages</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Creative Writing">Creative Writing</option>
+            <option value="Problem Solving">Problem Solving</option>
+            <option value="Critical Thinking">Critical Thinking</option>
+            <option value="Leadership">Leadership</option>
+          </select>
+          <input type="text" class="form-control" placeholder="Description" [(ngModel)]="newProposedSkillDescription" [ngModelOptions]="{standalone: true}">
+          <select class="form-control" placeholder="Level" [(ngModel)]="newProposedSkillLevel" [ngModelOptions]="{standalone: true}">
+            <option value="">-- Select a Level --</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+          <select class="form-control" placeholder="Category" [(ngModel)]="newProposedSkillCategory" [ngModelOptions]="{standalone: true}">
+            <option value="">-- Select a Category --</option>
+            <option value="Technology">Technology</option>
+            <option value="Creative">Creative</option>
+            <option value="Lifestyle">Lifestyle</option>
+          </select>
+          <button type="button" class="btn btn-primary" (click)="addSkill('proposed', newProposedSkillDescription, newProposedSkillLevel, newProposedSkillCategory)">Add</button>
         </div>
       </div>
 
       <!-- Searched Skills -->
       <div class="mb-3">
         <label class="form-label">Searched Skills</label>
-        <div class="input-group mb-2">
-          <input type="text" class="form-control" placeholder="Add a searched skill"
-                 [(ngModel)]="newSearchedSkill" [ngModelOptions]="{standalone: true}">
-          <button type="button" class="btn btn-primary" (click)="addSkill('searched', newSearchedSkill)">Add</button>
+        <div formArrayName="searchedSkills">
+          <div *ngFor="let skillGroup of searchedSkills.controls; let i = index" [formGroupName]="i" class="mb-3 p-3 border rounded">
+            <div class="mb-2">
+              <label for="searchedSkillName{{i}}" class="form-label">Skill Name</label>
+              <input type="text" id="searchedSkillName{{i}}" formControlName="name" class="form-control">
+            </div>
+            <div class="mb-2">
+              <label for="searchedSkillDescription{{i}}" class="form-label">Description</label>
+              <input type="text" id="searchedSkillDescription{{i}}" formControlName="description" class="form-control">
+            </div>
+            <div class="mb-2">
+              <label for="searchedSkillLevel{{i}}" class="form-label">Level</label>
+              <select id="searchedSkillLevel{{i}}" formControlName="level" class="form-control">
+                <option value="">-- Select a Level --</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label for="searchedSkillCategory{{i}}" class="form-label">Category</label>
+              <select id="searchedSkillCategory{{i}}" formControlName="category" class="form-control">
+                <option value="">-- Select a Category --</option>
+                <option value="Technology">Technology</option>
+                <option value="Creative">Creative</option>
+                <option value="Lifestyle">Lifestyle</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-outline-danger" (click)="removeSkill('searched', i)">Remove</button>
+          </div>
         </div>
-        <div class="d-flex flex-wrap gap-2">
-          <span *ngFor="let skill of searchedSkills.controls; let i = index" class="badge bg-primary me-1">
-            {{ skill.value }}
-            <button type="button" class="btn-close btn-close-white ms-2" (click)="removeSkill('searched', i)"
-                    aria-label="Remove"></button>
-          </span>
+        <div class="input-group mb-2">
+          <select class="form-control" [(ngModel)]="newSearchedSkillName" [ngModelOptions]="{standalone: true}">
+            <option value="">-- Select a Skill --</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Mobile App Development">Mobile App Development</option>
+            <option value="Graphic Design">Graphic Design</option>
+            <option value="UI/UX Design">UI/UX Design</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Content Writing">Content Writing</option>
+            <option value="Public Speaking">Public Speaking</option>
+            <option value="Photography">Photography</option>
+            <option value="Video Editing">Video Editing</option>
+            <option value="Data Analysis">Data Analysis</option>
+            <option value="Machine Learning">Machine Learning</option>
+            <option value="Cybersecurity">Cybersecurity</option>
+            <option value="Cloud Computing">Cloud Computing</option>
+            <option value="Project Management">Project Management</option>
+            <option value="Time Management">Time Management</option>
+            <option value="Cooking">Cooking</option>
+            <option value="Baking">Baking</option>
+            <option value="Music Production">Music Production</option>
+            <option value="Playing Guitar">Playing Guitar</option>
+            <option value="Learning Languages">Learning Languages</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Creative Writing">Creative Writing</option>
+            <option value="Problem Solving">Problem Solving</option>
+            <option value="Critical Thinking">Critical Thinking</option>
+            <option value="Leadership">Leadership</option>
+          </select>
+          <input type="text" class="form-control" placeholder="Description" [(ngModel)]="newSearchedSkillDescription" [ngModelOptions]="{standalone: true}">
+          <select class="form-control" placeholder="Level" [(ngModel)]="newSearchedSkillLevel" [ngModelOptions]="{standalone: true}">
+            <option value="">-- Select a Level --</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+          <select class="form-control" placeholder="Category" [(ngModel)]="newSearchedSkillCategory" [ngModelOptions]="{standalone: true}">
+            <option value="">-- Select a Category --</option>
+            <option value="Technology">Technology</option>
+            <option value="Creative">Creative</option>
+            <option value="Lifestyle">Lifestyle</option>
+          </select>
+          <button type="button" class="btn btn-primary" (click)="addSkill('searched', newSearchedSkillDescription, newSearchedSkillLevel, newSearchedSkillCategory)">Add</button>
         </div>
       </div>
 
@@ -54,10 +207,10 @@
   <ng-template #viewMode>
     <div>
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>User Profile</h2>
+        <h2>{{ user?.firstName }} {{user?.lastName}}</h2>
         <div>
           <button *ngIf="user && currentUser && user.id === currentUser.id" class="btn btn-primary me-2" (click)="toggleEdit()">Edit Skills</button>
-          <button *ngIf="user && currentUser && user.id !== currentUser.id" class="btn btn-primary me-2" (click)="startConversation(user.id)">Message</button>
+
           <button *ngIf="user && currentUser && user.id !== currentUser.id" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reportModal">Report User</button>
         </div>
       </div>
@@ -66,17 +219,28 @@
         <div class="card-body">
           <h3 class="card-title">Profile Information</h3>
           <p><strong>Email:</strong> {{ user.email }}</p>
-          
+
           <h4>Proposed Skills</h4>
           <div class="d-flex flex-wrap gap-2">
-            <span *ngFor="let skill of user.proposedSkills" class="badge bg-primary me-1">
-              {{ skill.name }}
-              <button *ngIf="user && currentUser && user.id !== currentUser.id" class="btn btn-sm btn-light ms-2" (click)="requestToLearn(skill)">Request to Learn</button>
-            </span>
+            <div *ngFor="let skill of user.proposedSkills" class="card mb-2" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">{{ skill.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ skill.category }}</h6>
+                <p class="card-text">{{ skill.description }}</p>
+                                    <p class="card-text"><small class="text-muted">Level: {{ skill.level }}</small></p>
+                                    <p class="card-text"><small class="text-muted">For more details contact me in : {{ user.email }}</small></p>                <button *ngIf="user && currentUser && user.id !== currentUser.id" class="btn btn-sm btn-primary" (click)="requestToLearn(skill)">Request to Learn</button>
+              </div>
+            </div>
           </div>
           <h4 class="mt-3">Searched Skills</h4>
           <div class="d-flex flex-wrap gap-2">
-            <span *ngFor="let skill of user.searchedSkills" class="badge bg-primary me-1">{{ skill.name }}</span>
+            <div *ngFor="let skill of user.searchedSkills" class="card mb-2" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">{{ skill.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ skill.category }}</h6>
+                <p class="card-text"><small class="text-muted">Level: {{ skill.level }}</small></p>
+              </div>
+            </div>
           </div>
 
           <div *ngIf="user && currentUser && user.id !== currentUser.id">
@@ -127,7 +291,7 @@
         <p>Loading profile...</p>
       </ng-template>
 
-      
+
     </div>
   </ng-template>
 </div>

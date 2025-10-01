@@ -16,13 +16,39 @@
 
   <div class="collapse navbar-collapse" id="navbarNav">
     <div class="d-flex gap-3 align-items-center ms-auto">
-      <input type="text" class="form-control" placeholder="Search for skills or users" style="width: 300px;" [(ngModel)]="searchQuery" (keyup.enter)="search()">
+      <select class="form-control" style="width: 300px;" [(ngModel)]="searchQuery" (keyup.enter)="search()">
+        <option value="">-- Search for skills --</option>
+        <option value="Web Development">Web Development</option>
+        <option value="Mobile App Development">Mobile App Development</option>
+        <option value="Graphic Design">Graphic Design</option>
+        <option value="UI/UX Design">UI/UX Design</option>
+        <option value="Digital Marketing">Digital Marketing</option>
+        <option value="Content Writing">Content Writing</option>
+        <option value="Public Speaking">Public Speaking</option>
+        <option value="Photography">Photography</option>
+        <option value="Video Editing">Video Editing</option>
+        <option value="Data Analysis">Data Analysis</option>
+        <option value="Machine Learning">Machine Learning</option>
+        <option value="Cybersecurity">Cybersecurity</option>
+        <option value="Cloud Computing">Cloud Computing</option>
+        <option value="Project Management">Project Management</option>
+        <option value="Time Management">Time Management</option>
+        <option value="Cooking">Cooking</option>
+        <option value="Baking">Baking</option>
+        <option value="Music Production">Music Production</option>
+        <option value="Playing Guitar">Playing Guitar</option>
+        <option value="Learning Languages">Learning Languages</option>
+        <option value="Mathematics">Mathematics</option>
+        <option value="Creative Writing">Creative Writing</option>
+        <option value="Problem Solving">Problem Solving</option>
+        <option value="Critical Thinking">Critical Thinking</option>
+        <option value="Leadership">Leadership</option>
+      </select>
       <button class="btn btn-primary" (click)="search()">Search</button>
     </div>
 
     <div class="d-flex gap-3 align-items-center ms-auto">
       <a *ngIf="!isAdmin" routerLink="/requests" class="nav-link text-dark fw-medium text-decoration-none">Requests</a>
-      <a routerLink="/messages" class="nav-link text-dark fw-medium text-decoration-none">Messages</a>
       <a *ngIf="isAdmin" routerLink="/admin/dashboard" class="nav-link text-dark fw-medium text-decoration-none">Dashboard</a>
       <a *ngIf="isAdmin" routerLink="/admin/reports" class="nav-link text-dark fw-medium text-decoration-none">Reports</a>
       <button (click)="logout()" class="btn fw-bold px-4 py-2" style="background-color: #f1f2f4; border-radius: 12px;">Logout</button>

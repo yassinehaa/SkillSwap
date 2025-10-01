@@ -1,11 +1,10 @@
 package org.skillswap.skillswapbackend.Controllers;
 
-import org.skillswap.skillswapbackend.dto.UserDTO2;
 import org.skillswap.skillswapbackend.jwt.JwtUtil;
 import org.skillswap.skillswapbackend.Services.UserDetailsServiceImpl;
 import org.skillswap.skillswapbackend.dto.AuthRequest;
 import org.skillswap.skillswapbackend.dto.UserDTO;
-import org.skillswap.skillswapbackend.Services.UserService;
+import org.skillswap.skillswapbackend.Services.PersonneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +20,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
-    private UserService userService;
+    private PersonneService userService;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -77,9 +76,6 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @GetMapping("/list")
-    public List<UserDTO2> countSkills(){
-        return userService.countSkills();
-    }
+
     
 }

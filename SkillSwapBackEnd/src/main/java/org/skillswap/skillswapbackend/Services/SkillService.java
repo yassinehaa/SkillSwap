@@ -3,10 +3,9 @@ package org.skillswap.skillswapbackend.Services;
 import org.modelmapper.ModelMapper;
 import org.skillswap.skillswapbackend.Models.Request;
 import org.skillswap.skillswapbackend.Models.Skill;
-import org.skillswap.skillswapbackend.Models.User;
-import org.skillswap.skillswapbackend.Repositories.SkillExchangeRepository;
+import org.skillswap.skillswapbackend.Models.Personne;
+import org.skillswap.skillswapbackend.Repositories.PersonneRepository;
 import org.skillswap.skillswapbackend.Repositories.SkillRepository;
-import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.skillswap.skillswapbackend.Repositories.RequestRepository;
 import org.skillswap.skillswapbackend.dto.SkillDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class SkillService {
     private SkillRepository skillRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private PersonneRepository userRepository;
 
     @Autowired
     private RequestRepository requestRepository;
@@ -33,8 +32,6 @@ public class SkillService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private SkillExchangeRepository skillExchangeRepository;
 
     
 
@@ -43,11 +40,7 @@ public class SkillService {
         List<Skill> skills = skillRepository.findByUserId(userId);
         for (Skill skill : skills) {
             List<Request> requests = requestRepository.findBySkillId(skill.getId());
-            for (Request request : requests) {
-                skillExchangeRepository.deleteByRequestId(request.getId());
-            }
             requestRepository.deleteBySkillId(skill.getId());
-            skillExchangeRepository.deleteByExchangeSkillId(skill.getId());
         }
         skillRepository.deleteByUserId(userId);
     }
@@ -74,11 +67,15 @@ public class SkillService {
     }
 
     public List<SkillDTO> addSkills(Long userId, List<SkillDTO> skillDTOs) {
-        User user = userRepository.findById(userId)
+        Personne user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         List<Skill> skills = skillDTOs.stream()
                 .map(skillDTO -> {
                     Skill skill = modelMapper.map(skillDTO, Skill.class);
+                    skill.setDescription(skillDTO.getDescription());
+                    skill.setLevel(skillDTO.getLevel());
+                    skill.setCategory(skillDTO.getCategory());
+                    skill.setStatus(Skill.SkillStatus.PENDING);
                     skill.setUser(user);
                     return skill;
                 })
@@ -108,5 +105,26 @@ public class SkillService {
 
     public List<Skill> getSkillObjectsByUserId(Long userId) {
         return skillRepository.findByUserId(userId);
+    }
+
+    public SkillDTO approveSkill(Long skillId) {
+        Skill skill = skillRepository.findById(skillId)
+                .orElseThrow(() -> new RuntimeException("Skill not found"));
+        skill.setStatus(Skill.SkillStatus.APPROVED);
+        return modelMapper.map(skillRepository.save(skill), SkillDTO.class);
+    }
+
+    public SkillDTO rejectSkill(Long skillId) {
+        Skill skill = skillRepository.findById(skillId)
+                .orElseThrow(() -> new RuntimeException("Skill not found"));
+        skill.setStatus(Skill.SkillStatus.REJECTED);
+        return modelMapper.map(skillRepository.save(skill), SkillDTO.class);
+    }
+
+    public List<SkillDTO> getPendingSkills() {
+        return skillRepository.findByStatus(Skill.SkillStatus.PENDING)
+                .stream()
+                .map(skill -> modelMapper.map(skill, SkillDTO.class))
+                .toList();
     }
 }

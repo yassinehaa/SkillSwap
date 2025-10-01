@@ -5,18 +5,18 @@ import org.modelmapper.ModelMapper;
 import org.skillswap.skillswapbackend.dto.RequestDTO;
 import org.skillswap.skillswapbackend.dto.RequestDetailsDTO;
 import org.skillswap.skillswapbackend.Models.Request;
+import org.skillswap.skillswapbackend.Repositories.PersonneRepository;
 import org.skillswap.skillswapbackend.Repositories.SkillRepository;
-import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RequestMapper {
 
-    private final UserRepository userRepository;
+    private final PersonneRepository userRepository;
     private final SkillRepository skillRepository;
     private final ModelMapper modelMapper;
 
-    public RequestMapper(UserRepository userRepository, SkillRepository skillRepository, ModelMapper modelMapper) {
+    public RequestMapper(PersonneRepository userRepository, SkillRepository skillRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.skillRepository = skillRepository;
         this.modelMapper = modelMapper;

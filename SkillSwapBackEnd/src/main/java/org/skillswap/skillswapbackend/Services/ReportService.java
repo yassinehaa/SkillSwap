@@ -2,9 +2,9 @@ package org.skillswap.skillswapbackend.Services;
 
 import lombok.RequiredArgsConstructor;
 import org.skillswap.skillswapbackend.Models.Report;
-import org.skillswap.skillswapbackend.Models.User;
+import org.skillswap.skillswapbackend.Models.Personne;
+import org.skillswap.skillswapbackend.Repositories.PersonneRepository;
 import org.skillswap.skillswapbackend.Repositories.ReportRepository;
-import org.skillswap.skillswapbackend.Repositories.UserRepository;
 import org.skillswap.skillswapbackend.dto.ReportDTO;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReportService {
     private final ReportRepository reportRepository;
-    private final UserRepository userRepository;
+    private final PersonneRepository userRepository;
     private final ModelMapper modelMapper;
 
     public ReportDTO createReport(ReportDTO reportDTO) {
-        User reporter = userRepository.findById(reportDTO.getReporterId())
+        Personne reporter = userRepository.findById(reportDTO.getReporterId())
                 .orElseThrow(() -> new RuntimeException("Reporter not found"));
-        User reportedUser = userRepository.findById(reportDTO.getReportedUserId())
+        Personne reportedUser = userRepository.findById(reportDTO.getReportedUserId())
                 .orElseThrow(() -> new RuntimeException("Reported user not found"));
 
         Report report = new Report();

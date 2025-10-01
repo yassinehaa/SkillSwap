@@ -19,9 +19,7 @@ public class UserDTOToUserConverter implements Converter<UserDTO, User> {
         destination.setLastName(source.getLastName());
         destination.setEmail(source.getEmail());
         destination.setPassword(source.getPassword());
-        
-
-
+        destination.setRole(source.getRole());
         return destination;
     }
 }

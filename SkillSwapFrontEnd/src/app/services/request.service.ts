@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { Request } from '../models/request.model';
 import { Skill } from '../models/skill.model';
 
-import { MessageService } from './message.service';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -14,16 +13,10 @@ import { tap } from 'rxjs/operators';
 export class RequestService {
   private baseUrl = 'http://localhost:8080/api/requests';
 
-  constructor(private http: HttpClient, private messageService: MessageService) { }
+  constructor(private http: HttpClient) { }
 
   sendRequest(request: any): Observable<any> {
-    if (request.paymentMethod === 'paypal') {
-      const message = {
-        receiverId: request.receiverId, // assuming you have receiverId in the request object
-        content: 'I would like to pay with PayPal. Please provide your PayPal address.'
-      };
-      this.messageService.sendHttpMessage(message).subscribe();
-    }
+
     return this.http.post(this.baseUrl, request);
   }
 
@@ -43,9 +36,7 @@ export class RequestService {
     return this.http.put<Request>(`${this.baseUrl}/${request.id}/reject`, {});
   }
 
-  acceptRequestWithSkillExchange(request: Request, skill: Skill): Observable<Request> {
-    return this.http.put<Request>(`${this.baseUrl}/${request.id}/accept-with-exchange`, { skillId: skill.id });
-  }
 
-  
+
+
 }

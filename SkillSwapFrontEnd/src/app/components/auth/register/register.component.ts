@@ -24,8 +24,7 @@ export class RegisterComponent {
       lastName: this.lastName,
       email: this.email,
       password: this.password,
-      isPremium: false,
-      isAdmin: false
+
     };
     this.authService.register(user).subscribe(() => {
       this.router.navigate(['/login']);

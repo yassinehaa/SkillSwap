@@ -46,11 +46,7 @@ public class RequestController {
         return ResponseEntity.ok(requestService.rejectRequest(requestId));
     }
 
-    @PutMapping("/{requestId}/accept-with-exchange")
-    public ResponseEntity<RequestDetailsDTO> acceptRequestWithSkillExchange(@PathVariable Long requestId, @RequestBody Map<String, Long> payload) {
-        Long skillId = payload.get("skillId");
-        return ResponseEntity.ok(requestService.acceptRequestWithSkillExchange(requestId, skillId));
-    }
+
 
     
 }

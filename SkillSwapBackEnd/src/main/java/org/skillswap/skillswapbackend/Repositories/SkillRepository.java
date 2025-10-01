@@ -10,6 +10,7 @@ public interface SkillRepository extends JpaRepository<Skill, Long> {
     List<Skill> findByUserId(Long userId);
     List<Skill> findByType(Skill.SkillType type);
     List<Skill> findByUserIdAndType(Long userId, Skill.SkillType type);
+    List<Skill> findByStatus(Skill.SkillStatus status);
     void deleteByUserId(Long userId);
     List<Skill>findByNameAndType(String name, Skill.SkillType type);
 

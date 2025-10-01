@@ -19,11 +19,11 @@ public class Evaluation {
 
     @ManyToOne
     @JoinColumn(name = "rater_id")
-    private User rater;
+    private Personne rater;
 
     @ManyToOne
     @JoinColumn(name = "rated_user_id")
-    private User ratedUser;
+    private Personne ratedUser;
 
     private int rating;
 
