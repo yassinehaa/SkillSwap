@@ -1,11 +1,10 @@
-import {CommonModule} from '@angular/common';
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {User} from '../../../models/user.model';
-import {UserService} from '../../../services/user.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Skill} from '../../../models/skill.model';
-
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { User } from '../../../models/user.model';
+import { UserService } from '../../../services/user.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Skill } from '../../../models/skill.model';
 
 import { ReportService } from '../../../services/report.service';
 import { EvaluationService } from '../../../services/evaluation.service';
@@ -13,7 +12,8 @@ import { EvaluationService } from '../../../services/evaluation.service';
 import { Request } from '../../../models/request.model';
 import { RequestService } from '../../../services/request.service';
 
-import {AuthService} from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
+import { SkillService } from '../../../services/skill.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -40,23 +40,33 @@ export class UserProfileComponent implements OnInit {
   reportReason: string = '';
   userRating: number = 0;
   ratingComment: string = '';
+  skills!: Skill[];
 
-  constructor(private userService: UserService, private fb: FormBuilder, private route: ActivatedRoute, private requestService: RequestService, private authService: AuthService, private router: Router, private reportService: ReportService, private evaluationService: EvaluationService) {
+  constructor(
+    private userService: UserService,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private requestService: RequestService,
+    private authService: AuthService,
+    private reportService: ReportService,
+    private evaluationService: EvaluationService,
+    private skillService: SkillService
+  ) {
     this.profileForm = this.fb.group({
-
       proposedSkills: this.fb.array([]),
       searchedSkills: this.fb.array([]),
-
     });
   }
 
   ngOnInit(): void {
+    this.getData();
+  }
+
+  getData(){
     this.route.data.subscribe(data => {
       this.user = data['user'];
       if (this.user) {
         this.profileForm.patchValue({
-
-
         });
         if (this.user.proposedSkills) {
           this.setSkills(this.user.proposedSkills, 'proposedSkills');
@@ -75,6 +85,7 @@ export class UserProfileComponent implements OnInit {
         });
       }
     });
+
   }
 
   // Get form arrays
@@ -90,43 +101,35 @@ export class UserProfileComponent implements OnInit {
   private setSkills(skills: Skill[], formArrayName: string): void {
     const formArray = this.profileForm.get(formArrayName) as FormArray;
     formArray.clear();
-    skills.forEach(skill => formArray.push(this.fb.group({
-      name: [skill.name, Validators.required],
-      description: [skill.description, Validators.required],
-      level: [skill.level, Validators.required],
-      category: [skill.category, Validators.required],
-      status: [skill.status]
-    })));
+    skills.forEach(skill =>
+      formArray.push(this.fb.group({
+        name: [skill.name, Validators.required],
+        description: [skill.description, Validators.required],
+        level: [skill.level, Validators.required],
+        category: [skill.category, Validators.required],
+        status: [skill.status]
+      }))
+    );
   }
 
   // Add new skill
   addSkill(type: 'proposed' | 'searched', description: string, level: string, category: string): void {
     if (type === 'proposed' && this.newProposedSkillName.trim()) {
-      const formArray = this.proposedSkills;
-      formArray.push(this.fb.group({
+      this.proposedSkills.push(this.fb.group({
         name: [this.newProposedSkillName.trim(), Validators.required],
         description: [description.trim(), Validators.required],
         level: [level.trim(), Validators.required],
         category: [category.trim(), Validators.required],
         status: ['PENDING']
       }));
-      this.newProposedSkillName = '';
-      this.newProposedSkillDescription = '';
-      this.newProposedSkillLevel = '';
-      this.newProposedSkillCategory = '';
     } else if (type === 'searched' && this.newSearchedSkillName.trim()) {
-      const formArray = this.searchedSkills;
-      formArray.push(this.fb.group({
+      this.searchedSkills.push(this.fb.group({
         name: [this.newSearchedSkillName.trim(), Validators.required],
         description: [description.trim(), Validators.required],
         level: [level.trim(), Validators.required],
         category: [category.trim(), Validators.required],
         status: ['PENDING']
       }));
-      this.newSearchedSkillName = '';
-      this.newSearchedSkillDescription = '';
-      this.newSearchedSkillLevel = '';
-      this.newSearchedSkillCategory = '';
     }
   }
 
@@ -145,16 +148,21 @@ export class UserProfileComponent implements OnInit {
         lastName: this.user.lastName,
         email: this.user.email,
         password: this.user.password,
-
-
         proposedSkills: this.proposedSkills.value.map((skill: Skill) => ({ ...skill, type: 'OFFERED' })),
         searchedSkills: this.searchedSkills.value.map((skill: Skill) => ({ ...skill, type: 'SEARCHED' }))
       };
+
       this.userService.updateUser(payload).subscribe({
         next: (updatedUser) => {
           this.user = updatedUser;
           this.isEditing = false;
           this.errorMessage = null;
+          if (this.user.proposedSkills) {
+            this.setSkills(this.user.proposedSkills, 'proposedSkills');
+          }
+          if (this.user.searchedSkills) {
+            this.setSkills(this.user.searchedSkills, 'searchedSkills');
+          }
         },
         error: (error: any) => {
           console.error('Error updating profile:', error);
@@ -180,13 +188,21 @@ export class UserProfileComponent implements OnInit {
         status: 'PENDING'
       };
       this.requestService.sendRequest(request).subscribe({
-        next: () => {
-          console.log('Request sent successfully');
-        },
-        error: (error: any) => {
-          console.error('Error sending request:', error);
-        }
+        next: () => console.log('Request sent successfully'),
+        error: (error: any) => console.error('Error sending request:', error)
       });
+    }
+  }
+
+  private updateFormWithUserData() {
+    if (this.user) {
+      this.profileForm.patchValue({});
+      if (this.user.proposedSkills) {
+        this.setSkills(this.user.proposedSkills, 'proposedSkills');
+      }
+      if (this.user.searchedSkills) {
+        this.setSkills(this.user.searchedSkills, 'searchedSkills');
+      }
     }
   }
 
@@ -202,9 +218,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-
-
-    submitReport(): void {
+  submitReport(): void {
     if (this.user && this.currentUser && this.reportReason.trim() && this.currentUser.id && this.user.id) {
       const report = {
         reporterId: this.currentUser.id,
@@ -215,17 +229,13 @@ export class UserProfileComponent implements OnInit {
         next: () => {
           console.log('Report submitted successfully');
           this.reportReason = '';
-          // Close the modal (you'll need to add Bootstrap JS for this)
         },
-        error: (error: any) => {
-          console.error('Error submitting report:', error);
-        }
+        error: (error: any) => console.error('Error submitting report:', error)
       });
     } else {
       console.error('Cannot submit report: Missing user, current user, or reason.');
     }
   }
-
 
   rateUser(rating: number): void {
     this.userRating = rating;
@@ -240,18 +250,16 @@ export class UserProfileComponent implements OnInit {
         comment: this.ratingComment.trim()
       };
       this.evaluationService.createEvaluation(evaluation).subscribe({
-        next: () => {
+        next: (newEvaluation) => {
           console.log('Rating submitted successfully');
           this.userRating = 0;
           this.ratingComment = '';
+          if (this.user) {
+            this.user.evaluations = [...(this.user.evaluations || []), newEvaluation]; // Create a new array reference
+          }
         },
-        error: (error: any) => {
-          console.error('Error submitting rating:', error);
-        }
+        error: (error: any) => console.error('Error submitting rating:', error)
       });
     }
   }
-
 }
-
-

@@ -59,7 +59,4 @@ export class UserService {
       catchError(this.handleError)
     );
   }
-  skillCount(): Observable<countSkill[]>{
-    return this.http.get<countSkill[]>(`${this.apiUrl}/list` , { headers: this.getHeaders() })
-  }
 }

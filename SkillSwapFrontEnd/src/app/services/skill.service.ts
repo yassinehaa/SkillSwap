@@ -11,7 +11,7 @@ export class SkillService {
 
   constructor(private http: HttpClient) { }
 
-    getUserSkills(userId: number | undefined): Observable<Skill[]> {
+  getUserSkills(userId: number | undefined): Observable<Skill[]> {
     return this.http.get<Skill[]>(`${this.baseUrl}/user/${userId}`);
   }
 }
