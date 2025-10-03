@@ -14,11 +14,6 @@
           <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" [disabled]="request.status !== 'PENDING'">
             Accept
           </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#" (click)="acceptWithSkillExchange(request); $event.preventDefault()">With Skill Exchange</a></li>
-            
-            <li><a class="dropdown-item" href="#" (click)="acceptRequest(request); $event.preventDefault()">Without Exchange</a></li>
-          </ul>
         </div>
         <button class="btn btn-danger ms-2" (click)="rejectRequest(request)" [disabled]="request.status !== 'PENDING'">Reject</button>
       </div>

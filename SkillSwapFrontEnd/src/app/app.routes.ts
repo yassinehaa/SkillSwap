@@ -16,15 +16,13 @@ export const routes: Routes = [
   {path : 'register' , component : RegisterComponent},
   {path : 'profile' , component : UserProfileComponent, resolve: { user: UserResolver }},
   {path : 'profile/:id' , component : UserProfileComponent, resolve: { user: UserResolver }},
-  {path : 'profile/edit' , loadComponent: () => import('./components/user/user-profile-edit/user-profile-edit.component').then(m => m.UserProfileEditComponent)},
-  {path : 'infos' , loadComponent: () => import('./components/user/user-info-page/user-info-page.component').then(m => m.UserInfoPageComponent)},
   {path : 'search' , component : SearchResultsComponent},
   {path : 'requests' , component : RequestListComponent},
-  
-  
+
+
   {path : 'request-skill' , loadComponent: () => import('./components/requests/request-skill/request-skill.component').then(m => m.RequestSkillComponent)},
-  
-  
+
+
   {path : 'admin/dashboard' , component : AdminDashboardComponent},
   {path : 'admin/reports' , component : ReportListComponent},
 ];

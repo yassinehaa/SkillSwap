@@ -48,9 +48,7 @@ export class RequestListComponent implements OnInit {
     });
   }
 
-  acceptWithSkillExchange(request: Request): void {
-    this.router.navigate(['/skill-exchange', request.id]);
-  }
 
-  
+
+
 }
