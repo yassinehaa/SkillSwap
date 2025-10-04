@@ -7,6 +7,7 @@ import { User } from '../../../models/user.model';
 
 import { Router } from '@angular/router';
 import {NgForOf, NgIf} from "@angular/common";
+import {filter} from 'rxjs';
 
 @Component({
   selector: 'app-request-list',
@@ -19,6 +20,7 @@ import {NgForOf, NgIf} from "@angular/common";
 })
 export class RequestListComponent implements OnInit {
   requests: Request[] = [];
+  sentRequests: Request[] = [];
   currentUser: User | null = null;
 
   constructor(private requestService: RequestService, private authService: AuthService, private router: Router) { }
@@ -29,6 +31,9 @@ export class RequestListComponent implements OnInit {
       if (this.currentUser && this.currentUser.id) {
         this.requestService.getRequests(this.currentUser.id).subscribe(requests => {
           this.requests = requests;
+        });
+        this.requestService.getSentRequests(this.currentUser.id).subscribe(sentRequests => {
+          this.sentRequests = sentRequests;
         });
       }
     });
@@ -47,8 +52,6 @@ export class RequestListComponent implements OnInit {
 
     });
   }
-
-
 
 
 }

@@ -38,6 +38,12 @@ public class RequestServiceImpl {
                 .collect(Collectors.toList());
     }
 
+    public List<RequestDetailsDTO> getRequestsByRequesterId(Long requesterId) {
+        return requestRepository.findByRequesterId(requesterId).stream()
+                .map(requestMapper::toDetailsDTO)
+                .collect(Collectors.toList());
+    }
+
     
     public RequestDetailsDTO getRequestById(Long id) {
         Request request = requestRepository.findById(id).orElseThrow(() -> new RuntimeException("Request not found"));

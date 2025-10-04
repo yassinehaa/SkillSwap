@@ -142,27 +142,30 @@ export class UserProfileComponent implements OnInit {
   // Submit form
   onSubmit(): void {
     if (this.profileForm.valid && this.user?.id) {
-      const payload = {
-        id: this.user.id,
-        firstName: this.user.firstName,
-        lastName: this.user.lastName,
-        email: this.user.email,
-        password: this.user.password,
+      const payload: User = {
+        ...this.user,
         proposedSkills: this.proposedSkills.value.map((skill: Skill) => ({ ...skill, type: 'OFFERED' })),
         searchedSkills: this.searchedSkills.value.map((skill: Skill) => ({ ...skill, type: 'SEARCHED' }))
       };
 
       this.userService.updateUser(payload).subscribe({
-        next: (updatedUser) => {
-          this.user = updatedUser;
-          this.isEditing = false;
-          this.errorMessage = null;
-          if (this.user.proposedSkills) {
-            this.setSkills(this.user.proposedSkills, 'proposedSkills');
-          }
-          if (this.user.searchedSkills) {
-            this.setSkills(this.user.searchedSkills, 'searchedSkills');
-          }
+        next: () => {
+          const userId = this.user?.id as number;
+          this.userService.getUserById(userId).subscribe({
+            next: (refreshedUser) => {
+              this.user = refreshedUser;
+
+              this.setSkills(this.user.proposedSkills || [], 'proposedSkills');
+              this.setSkills(this.user.searchedSkills || [], 'searchedSkills');
+
+              this.isEditing = false;
+              this.errorMessage = null;
+            },
+            error: (err) => {
+              console.error('Error refreshing user:', err);
+              this.errorMessage = 'Profile updated but failed to reload user data.';
+            }
+          });
         },
         error: (error: any) => {
           console.error('Error updating profile:', error);
@@ -173,6 +176,7 @@ export class UserProfileComponent implements OnInit {
       this.errorMessage = 'Cannot update profile: User ID is missing or form is invalid.';
     }
   }
+
 
   toggleEdit(): void {
     this.isEditing = !this.isEditing;

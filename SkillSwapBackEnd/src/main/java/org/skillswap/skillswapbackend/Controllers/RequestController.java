@@ -31,6 +31,11 @@ public class RequestController {
         return ResponseEntity.ok(requestService.getRequestsByReceiverId(receiverId));
     }
 
+    @GetMapping("/sent/{requesterId}")
+    public ResponseEntity<List<RequestDetailsDTO>> getRequestsByRequesterId(@PathVariable Long requesterId) {
+        return ResponseEntity.ok(requestService.getRequestsByRequesterId(requesterId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RequestDetailsDTO> getRequestById(@PathVariable Long id) {
         return ResponseEntity.ok(requestService.getRequestById(id));

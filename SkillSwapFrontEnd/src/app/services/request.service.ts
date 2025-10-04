@@ -24,6 +24,10 @@ export class RequestService {
     return this.http.get<Request[]>(`${this.baseUrl}/received/${receiverId}`);
   }
 
+  getSentRequests(requesterId: number): Observable<Request[]> {
+    return this.http.get<Request[]>(`${this.baseUrl}/sent/${requesterId}`);
+  }
+
   getRequest(id: number): Observable<Request> {
     return this.http.get<Request>(`${this.baseUrl}/${id}`);
   }

@@ -10,13 +10,20 @@
         <strong>{{ request.requester.firstName }} {{ request.requester.lastName }}</strong> wants to learn <strong>{{ request.skill.name }}</strong>.
       </div>
       <div>
-        <div class="btn-group">
-          <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" [disabled]="request.status !== 'PENDING'">
-            Accept
-          </button>
-        </div>
-        <button class="btn btn-danger ms-2" (click)="rejectRequest(request)" [disabled]="request.status !== 'PENDING'">Reject</button>
+          <button class="btn btn-outline-success" (click)="acceptRequest(request)" [disabled]="request.status !== 'PENDING'">Accept</button>
+
+        <button class="btn btn-outline-danger" (click)="rejectRequest(request)" [disabled]="request.status !== 'PENDING'">Reject</button>
       </div>
+
     </li>
   </ul>
+  <h2>Sent Requests Status</h2>
+    <div *ngFor="let request of sentRequests">
+      <li *ngIf="request.status == 'ACCEPTED'">
+        <strong>{{ request.receiver.firstName }} {{ request.receiver.lastName }}</strong> has accepted your request to learn <strong>{{ request.skill.name }}</strong>.
+      </li>
+      <li *ngIf="request.status == 'REJECTED'">
+        <strong>{{ request.receiver.firstName }} {{ request.receiver.lastName }}</strong> has rejected your request to learn <strong>{{ request.skill.name }}</strong>.
+      </li>
+    </div>
 </div>

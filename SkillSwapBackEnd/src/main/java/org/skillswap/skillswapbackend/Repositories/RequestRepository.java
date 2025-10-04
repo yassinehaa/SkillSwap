@@ -14,6 +14,8 @@ import java.util.List;
 public interface RequestRepository extends JpaRepository<Request, Long> {
     List<Request> findByReceiverId(Long receiverId);
 
+    List<Request> findByRequesterId(Long requesterId);
+
     List<Request> findBySkillId(Long skillId);
 
     @Modifying
