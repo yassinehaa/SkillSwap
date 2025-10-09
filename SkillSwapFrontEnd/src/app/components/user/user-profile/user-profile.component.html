@@ -218,9 +218,6 @@
 
       <div *ngIf="user; else loading" class="card">
         <div class="card-body">
-          <h3 class="card-title">Profile Information</h3>
-          <p><strong>Email:</strong> {{ user.email }}</p>
-
           <h4>Proposed Skills</h4>
           <div class="d-flex flex-wrap gap-2">
             <div *ngFor="let skill of user.proposedSkills" class="card mb-2" style="width: 18rem;">
@@ -229,7 +226,8 @@
                 <h6 class="card-subtitle mb-2 text-muted">{{ skill.category }}</h6>
                 <p class="card-text">{{ skill.description }}</p>
                                     <p class="card-text"><small class="text-muted">Level: {{ skill.level }}</small></p>
-                                    <p class="card-text"><small class="text-muted">For more details contact me in : {{ user.email }}</small></p>                <button *ngIf="user && currentUser && user.id !== currentUser.id" class="btn btn-sm btn-primary" (click)="requestToLearn(skill)">Request to Learn</button>
+                                    <p class="card-text"><small class="text-muted">For more details contact me in : {{ user.email }}</small></p>
+                <button *ngIf="user && currentUser && user.id !== currentUser.id" class="btn btn-sm btn-primary" (click)="requestToLearn(skill)">Request to Learn</button>
               </div>
             </div>
           </div>
@@ -238,6 +236,7 @@
             <div *ngFor="let skill of user.searchedSkills" class="card mb-2" style="width: 18rem;">
               <div class="card-body">
                 <h5 class="card-title">{{ skill.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ skill.description }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted">{{ skill.category }}</h6>
                 <p class="card-text"><small class="text-muted">Level: {{ skill.level }}</small></p>
               </div>

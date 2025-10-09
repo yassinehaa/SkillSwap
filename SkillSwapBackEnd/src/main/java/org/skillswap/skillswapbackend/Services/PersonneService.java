@@ -51,7 +51,6 @@ public class PersonneService {
             throw new RuntimeException("Email already exists");
         }
 
-        // Default role to USER if not provided
         if (userDTO.getRole() == null) {
             userDTO.setRole(Role.USER);
         }
@@ -59,14 +58,12 @@ public class PersonneService {
         Personne user;
         if (userDTO.getRole() == Role.ADMIN) {
             user = modelMapper.map(userDTO, Admin.class);
-        } else { // either Role.USER or default
+        } else {
             user = modelMapper.map(userDTO, User.class);
         }
 
-        // Encode password
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
-        // Save and return DTO
         user = personneRepository.save(user);
         return modelMapper.map(user, UserDTO.class);
     }
@@ -104,13 +101,11 @@ public class PersonneService {
         if (userDTO.getId() != null && !userDTO.getId().equals(id)) {
             throw new RuntimeException("User ID in request body does not match path ID");
         }
-        // Update basic user information
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         
 
-        // Update skills
         skillService.deleteSkillsByUserId(id);
         if (userDTO.getProposedSkills() != null && !userDTO.getProposedSkills().isEmpty()) {
             skillService.addSkills(id, userDTO.getProposedSkills());

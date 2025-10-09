@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, NgForm} from '@angular/forms';
 import {AuthService} from "../../../services/auth.service";
 import {Router, RouterLink} from "@angular/router";
-import {response} from 'express';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-login',
   imports: [
     FormsModule,
-    RouterLink
+    RouterLink,
+    NgIf
   ],
   templateUrl: './login.component.html',
   standalone: true,
@@ -19,8 +20,13 @@ export class LoginComponent {
   password: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
-
-  onSubmit() {
+  onSubmit(form: NgForm) {
+    if (form.invalid) {
+      Object.values(form.controls).forEach((control: any) => {
+        control.markAsTouched();
+      });
+      return;
+    }
     const credentials = { email: this.email, password: this.password };
     this.authService.login(credentials).subscribe({
       next: (response) => {

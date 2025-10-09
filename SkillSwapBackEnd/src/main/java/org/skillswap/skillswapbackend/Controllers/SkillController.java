@@ -17,12 +17,10 @@ public class SkillController {
     @Autowired
     private SkillService skillService;
 
-    
-
-    @GetMapping("/match/{userId}")
-    public ResponseEntity<List<SkillDTO>> getMatchingSkills(@PathVariable Long userId) {
-        return ResponseEntity.ok(skillService.getMatchingSkills(userId));
-    }
+//    @GetMapping("/match/{userId}")
+//    public ResponseEntity<List<SkillDTO>> getMatchingSkills(@PathVariable Long userId) {
+//        return ResponseEntity.ok(skillService.getMatchingSkills(userId));
+//    }
         @GetMapping("/search")
     public ResponseEntity<List<SkillSearchResultDTO>> getByName(@RequestParam String name)    {
         return ResponseEntity.ok(skillService.getSkillsByName(name));

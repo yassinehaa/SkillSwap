@@ -28,7 +28,7 @@ export class RequestListComponent implements OnInit {
   ngOnInit(): void {
     this.authService.getCurrentUser().subscribe(user => {
       this.currentUser = user;
-      if (this.currentUser && this.currentUser.id) {
+      if (this.currentUser.id) {
         this.requestService.getRequests(this.currentUser.id).subscribe(requests => {
           this.requests = requests;
         });

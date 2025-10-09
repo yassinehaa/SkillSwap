@@ -22,10 +22,10 @@ public class Skill {
     private String category;
 
     @Enumerated(EnumType.STRING)
-    private SkillStatus status; // PENDING, APPROVED, REJECTED
+    private SkillStatus status;
 
     @Enumerated(EnumType.STRING)
-    private SkillType type; // OFFERED or SEARCHED
+    private SkillType type;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

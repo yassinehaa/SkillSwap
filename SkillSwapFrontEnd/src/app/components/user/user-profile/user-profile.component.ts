@@ -49,8 +49,7 @@ export class UserProfileComponent implements OnInit {
     private requestService: RequestService,
     private authService: AuthService,
     private reportService: ReportService,
-    private evaluationService: EvaluationService,
-    private skillService: SkillService
+    private evaluationService: EvaluationService
   ) {
     this.profileForm = this.fb.group({
       proposedSkills: this.fb.array([]),
@@ -66,8 +65,6 @@ export class UserProfileComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.user = data['user'];
       if (this.user) {
-        this.profileForm.patchValue({
-        });
         if (this.user.proposedSkills) {
           this.setSkills(this.user.proposedSkills, 'proposedSkills');
         }
@@ -88,7 +85,6 @@ export class UserProfileComponent implements OnInit {
 
   }
 
-  // Get form arrays
   get proposedSkills(): FormArray {
     return this.profileForm.get('proposedSkills') as FormArray;
   }
@@ -97,7 +93,6 @@ export class UserProfileComponent implements OnInit {
     return this.profileForm.get('searchedSkills') as FormArray;
   }
 
-  // Set skills in form array
   private setSkills(skills: Skill[], formArrayName: string): void {
     const formArray = this.profileForm.get(formArrayName) as FormArray;
     formArray.clear();
@@ -133,13 +128,11 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  // Remove skill
   removeSkill(type: 'proposed' | 'searched', index: number): void {
     const formArray = type === 'proposed' ? this.proposedSkills : this.searchedSkills;
     formArray.removeAt(index);
   }
 
-  // Submit form
   onSubmit(): void {
     if (this.profileForm.valid && this.user?.id) {
       const payload: User = {
@@ -172,8 +165,6 @@ export class UserProfileComponent implements OnInit {
           this.errorMessage = 'Failed to update profile. Please try again.';
         }
       });
-    } else {
-      this.errorMessage = 'Cannot update profile: User ID is missing or form is invalid.';
     }
   }
 
@@ -192,34 +183,11 @@ export class UserProfileComponent implements OnInit {
         status: 'PENDING'
       };
       this.requestService.sendRequest(request).subscribe({
-        next: () => console.log('Request sent successfully'),
+        next: () =>
+          console.log('Request sent successfully'),
         error: (error: any) => console.error('Error sending request:', error)
       });
     }
-  }
-
-  private updateFormWithUserData() {
-    if (this.user) {
-      this.profileForm.patchValue({});
-      if (this.user.proposedSkills) {
-        this.setSkills(this.user.proposedSkills, 'proposedSkills');
-      }
-      if (this.user.searchedSkills) {
-        this.setSkills(this.user.searchedSkills, 'searchedSkills');
-      }
-    }
-  }
-
-  acceptRequest(request: Request): void {
-    this.requestService.acceptRequest(request).subscribe(() => {
-      request.status = 'ACCEPTED';
-    });
-  }
-
-  rejectRequest(request: Request): void {
-    this.requestService.rejectRequest(request).subscribe(() => {
-      request.status = 'REJECTED';
-    });
   }
 
   submitReport(): void {
@@ -236,8 +204,6 @@ export class UserProfileComponent implements OnInit {
         },
         error: (error: any) => console.error('Error submitting report:', error)
       });
-    } else {
-      console.error('Cannot submit report: Missing user, current user, or reason.');
     }
   }
 
@@ -259,7 +225,7 @@ export class UserProfileComponent implements OnInit {
           this.userRating = 0;
           this.ratingComment = '';
           if (this.user) {
-            this.user.evaluations = [...(this.user.evaluations || []), newEvaluation]; // Create a new array reference
+            this.user.evaluations = [...(this.user.evaluations || []), newEvaluation];
           }
         },
         error: (error: any) => console.error('Error submitting rating:', error)

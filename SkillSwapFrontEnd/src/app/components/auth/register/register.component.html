@@ -4,68 +4,118 @@
       <div class="card shadow-lg register-card">
         <div class="card-body">
           <h2 class="card-title text-center welcome-header">Create an account</h2>
-          <form (ngSubmit)="onSubmit()">
+
+          <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" novalidate>
+
+            <!-- FIRST NAME -->
             <div class="mb-3 input-group-custom">
               <label for="firstName" class="form-label">First Name</label>
               <div class="input-wrapper">
                 <i class="bi bi-person input-icon"></i>
-                <input type="text"
-                       id="firstName"
-                       name="firstName"
-                       [(ngModel)]="firstName"
-                       placeholder="Enter your first name"
-                       required
-                       class="form-control form-control-custom">
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  [(ngModel)]="firstName"
+                  placeholder="Enter your first name"
+                  required
+                  minlength="2"
+                  #firstNameRef="ngModel"
+                  class="form-control form-control-custom"
+                />
+              </div>
+              <div class="text-danger small" *ngIf="firstNameRef.invalid && firstNameRef.touched">
+                <div *ngIf="firstNameRef.errors?.['required']">First name is required.</div>
+                <div *ngIf="firstNameRef.errors?.['minlength']">Must be at least 2 characters long.</div>
               </div>
             </div>
+
+            <!-- LAST NAME -->
             <div class="mb-3 input-group-custom">
               <label for="lastName" class="form-label">Last Name</label>
               <div class="input-wrapper">
                 <i class="bi bi-person-fill input-icon"></i>
-                <input type="text"
-                       id="lastName"
-                       name="lastName"
-                       [(ngModel)]="lastName"
-                       placeholder="Enter your last name"
-                       required
-                       class="form-control form-control-custom">
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  [(ngModel)]="lastName"
+                  placeholder="Enter your last name"
+                  required
+                  minlength="2"
+                  #lastNameRef="ngModel"
+                  class="form-control form-control-custom"
+                />
+              </div>
+              <div class="text-danger small" *ngIf="lastNameRef.invalid && lastNameRef.touched">
+                <div *ngIf="lastNameRef.errors?.['required']">Last name is required.</div>
+                <div *ngIf="lastNameRef.errors?.['minlength']">Must be at least 2 characters long.</div>
               </div>
             </div>
+
+            <!-- EMAIL -->
             <div class="mb-3 input-group-custom">
               <label for="email" class="form-label">Email</label>
               <div class="input-wrapper">
                 <i class="bi bi-envelope input-icon"></i>
-                <input type="email"
-                       id="email"
-                       name="email"
-                       [(ngModel)]="email"
-                       placeholder="Enter your email"
-                       required
-                       class="form-control form-control-custom">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  [(ngModel)]="email"
+                  placeholder="Enter your email"
+                  required
+                  email
+                  #emailRef="ngModel"
+                  class="form-control form-control-custom"
+                />
+              </div>
+              <div class="text-danger small" *ngIf="emailRef.invalid && emailRef.touched">
+                <div *ngIf="emailRef.errors?.['required']">Email is required.</div>
+                <div *ngIf="emailRef.errors?.['email']">Please enter a valid email address.</div>
               </div>
             </div>
+
+            <!-- PASSWORD -->
             <div class="mb-3 input-group-custom">
               <label for="password" class="form-label">Password</label>
               <div class="input-wrapper">
                 <i class="bi bi-lock input-icon"></i>
-                <input type="password"
-                       id="password"
-                       name="password"
-                       [(ngModel)]="password"
-                       placeholder="Enter your password"
-                       required
-                       class="form-control form-control-custom">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  [(ngModel)]="password"
+                  placeholder="Enter your password"
+                  required
+                  minlength="6"
+                  #passwordRef="ngModel"
+                  class="form-control form-control-custom"
+                />
+              </div>
+              <div class="text-danger small" *ngIf="passwordRef.invalid && passwordRef.touched">
+                <div *ngIf="passwordRef.errors?.['required']">Password is required.</div>
+                <div *ngIf="passwordRef.errors?.['minlength']">Must be at least 6 characters long.</div>
               </div>
             </div>
+
+            <!-- SUBMIT -->
             <div class="d-grid">
-              <button type="submit" class="btn btn-success register-button">
+              <button
+                type="submit"
+                class="btn btn-success register-button"
+                [disabled]="registerForm.invalid"
+              >
                 <i class="bi bi-person-plus me-2"></i>
                 Sign up
               </button>
             </div>
           </form>
+
           <div class="text-center mt-3">
-            <a routerLink="/login" class="login-link">Already have an account? Log in</a>
+            <a routerLink="/login" class="login-link">
+              Already have an account? Log in
+            </a>
           </div>
         </div>
       </div>

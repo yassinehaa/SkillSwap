@@ -16,4 +16,6 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
     void deleteByRaterIdOrRatedUserId(@Param("userId") Long userId);
 
     List<Evaluation> findByRatedUserId(Long ratedUserId);
+
+    Long countEvaluationByRatedUserId(Long ratedUserId);
 }

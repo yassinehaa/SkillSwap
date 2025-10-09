@@ -42,6 +42,8 @@ public class EvaluationService {
                 .map(evaluation -> modelMapper.map(evaluation, EvaluationDTO.class))
                 .collect(Collectors.toList());
     }
+    public Long countEvaluationByRatedUserId(Long ratedUserId){
+        return evaluationRepository.countEvaluationByRatedUserId(ratedUserId);
+    }
 
-    
 }

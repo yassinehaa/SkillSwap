@@ -31,7 +31,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*"); // Use addAllowedOriginPattern for broader access
+        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/users/register", "/api/users/login", "/api/admin/register", "/api/skills/search", "/api/skills", "/ws/**", "/api/requests", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml", "/swagger-resources", "/swagger-resources/**").permitAll()
                         .requestMatchers("/api/users/all").hasRole("ADMIN")
-                        .requestMatchers("/api/users/{id}").authenticated() // Specific user updates require authentication
+                        .requestMatchers("/api/users/{id}").authenticated()
                         .requestMatchers("/api/users/current").authenticated()
                         .anyRequest().authenticated()
                 )

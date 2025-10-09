@@ -33,8 +33,6 @@ public class SkillService {
     private ModelMapper modelMapper;
 
 
-    
-
     @Transactional
     public void deleteSkillsByUserId(Long userId) {
         List<Skill> skills = skillRepository.findByUserId(userId);
@@ -52,19 +50,19 @@ public class SkillService {
                 .toList();
     }
 
-    public List<SkillDTO> getMatchingSkills(Long userId) {
-        List<Skill> searchedSkills = skillRepository.findByUserId(userId)
-                .stream()
-                .filter(skill -> skill.getType() == Skill.SkillType.SEARCHED)
-                .toList();
-
-        return skillRepository.findByType(Skill.SkillType.OFFERED)
-                .stream()
-                .filter(offeredSkill -> searchedSkills.stream()
-                        .anyMatch(searchedSkill -> searchedSkill.getName().equals(offeredSkill.getName())))
-                .map(skill -> modelMapper.map(skill, SkillDTO.class))
-                .toList();
-    }
+//    public List<SkillDTO> getMatchingSkills(Long userId) {
+//        List<Skill> searchedSkills = skillRepository.findByUserId(userId)
+//                .stream()
+//                .filter(skill -> skill.getType() == Skill.SkillType.SEARCHED)
+//                .toList();
+//
+//        return skillRepository.findByType(Skill.SkillType.OFFERED)
+//                .stream()
+//                .filter(offeredSkill -> searchedSkills.stream()
+//                        .anyMatch(searchedSkill -> searchedSkill.getName().equals(offeredSkill.getName())))
+//                .map(skill -> modelMapper.map(skill, SkillDTO.class))
+//                .toList();
+//    }
 
     public List<SkillDTO> addSkills(Long userId, List<SkillDTO> skillDTOs) {
         Personne user = userRepository.findById(userId)

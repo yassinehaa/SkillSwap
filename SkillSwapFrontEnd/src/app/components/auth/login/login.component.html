@@ -4,7 +4,7 @@
       <div class="card shadow-lg login-card">
         <div class="card-body">
           <h2 class="card-title text-center welcome-header">Welcome back</h2>
-          <form (ngSubmit)="onSubmit()">
+          <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" novalidate>
             <div class="mb-3 input-group-custom">
               <label for="email" class="form-label">Email</label>
               <div class="input-wrapper">
@@ -14,8 +14,14 @@
                        name="email"
                        [(ngModel)]="email"
                        placeholder="Enter your email"
+                       email
                        required
+                       #emailRef="ngModel"
                        class="form-control form-control-custom">
+              </div>
+              <div class="text-danger small" *ngIf="emailRef.invalid && emailRef.touched">
+                <div *ngIf="emailRef.errors?.['required']">Email is required.</div>
+                <div *ngIf="emailRef.errors?.['email']">Please enter a valid email address.</div>
               </div>
             </div>
             <div class="mb-3 input-group-custom">
@@ -27,12 +33,19 @@
                        name="password"
                        [(ngModel)]="password"
                        placeholder="Enter your password"
+                       minlength="6"
                        required
+                       #passwordRef="ngModel"
                        class="form-control form-control-custom">
+              </div>
+              <div class="text-danger small" *ngIf="passwordRef.invalid && passwordRef.touched">
+                <div *ngIf="passwordRef.errors?.['required']">Password is required.</div>
+                <div *ngIf="passwordRef.errors?.['minlength']">Must be at least 6 characters long.</div>
               </div>
             </div>
             <div class="d-grid">
-              <button type="submit" class="btn btn-primary login-button">
+              <button type="submit" class="btn btn-primary login-button"
+              [disabled]="loginForm.invalid">
                 <i class="bi bi-box-arrow-in-right me-2"></i>
                 Log in
               </button>

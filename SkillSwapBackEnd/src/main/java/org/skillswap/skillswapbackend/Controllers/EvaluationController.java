@@ -16,4 +16,8 @@ public class EvaluationController {
     public ResponseEntity<EvaluationDTO> createEvaluation(@RequestBody EvaluationDTO evaluationDTO) {
         return ResponseEntity.ok(evaluationService.createEvaluation(evaluationDTO));
     }
+    @GetMapping("/{ratedUserId}")
+    public Long countEvaluationByRatedUserId(@PathVariable Long ratedUserId){
+        return evaluationService.countEvaluationByRatedUserId(ratedUserId);
+    }
 }

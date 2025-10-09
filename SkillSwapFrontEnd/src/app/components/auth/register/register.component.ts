@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import {Router, RouterLink} from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, NgForm} from '@angular/forms';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, NgIf],
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
@@ -18,7 +19,13 @@ export class RegisterComponent {
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  onSubmit(): void {
+  onSubmit(form: NgForm): void {
+    if (form.invalid) {
+      Object.values(form.controls).forEach((control: any) => {
+        control.markAsTouched();
+      });
+      return;
+    }
     const user = {
       firstName: this.firstName,
       lastName: this.lastName,

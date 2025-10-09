@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';   // ✅ needed for ngModel
+import { FormsModule } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
 import { SkillSearchResultDTO } from '../../models/skill-search-result.dto';
 
@@ -9,7 +9,7 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 @Component({
   selector: 'app-search-results',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],  // ✅ include FormsModule
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './search-results.component.html',
   styleUrls: ['./search-results.component.css']
 })
@@ -27,7 +27,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
   private search(): void {
-    if (this.name && this.name.trim() !== '') {
+    if (this.name) {
       this.searchService.searchSkills(this.name).subscribe(skills => {
         this.results = skills;
         console.log(skills);
